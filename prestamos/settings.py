@@ -189,6 +189,12 @@ if not get_env_bool('PRESTAMOS_LOCALMODE'):
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 
+if os.getenv('FORCE_SCRIPT_NAME'):
+    FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME')
+    USE_X_FORWARDED_HOST = True
+    STATIC_URL = os.getenv('FORCE_SCRIPT_NAME') + "/static/"
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', '')
 EMAIL_PORT = os.getenv('EMAIL_PORT', '')
