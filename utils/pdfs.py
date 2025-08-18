@@ -63,7 +63,7 @@ def generate_invoice(response, petition: Petition):
         c.drawString(2*cm, height - 9.5*cm, "Condiciones:")
         c.setFont("Helvetica", 12)
         text_obj = c.beginText(2*cm, height - 10.5*cm)
-        text_obj.setLeading(4)
+        text_obj.setLeading(12)
         for line in conditions.splitlines():
             text_obj.textLine(line)
         c.drawText(text_obj)
@@ -104,10 +104,10 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
 
     y = height - 2 * cm
     c.setFont("Helvetica-Bold", 12)
-    c.drawString(2 * cm, y, "Nombre")
+    c.drawString(1 * cm, y, "Nombre")
     c.drawString(10 * cm, y, "Tipo")
-    c.drawString(14 * cm, y, "Código")
-    c.drawString(18 * cm, y, "Fecha (Creada/Aceptada)")
+    c.drawString(18 * cm, y, "Código")
+    c.drawString(22 * cm, y, "Fecha (Creada/Aceptada)")
 
     c.setFont("Helvetica", 11)
     y -= 1 * cm
@@ -118,10 +118,10 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
         created = petition.date_reserved.strftime("%d-%m-%Y") if petition.date_reserved else ""
         until = petition.until.strftime("%d-%m-%Y") if petition.until else ""
 
-        c.drawString(2 * cm, y, name)
+        c.drawString(1 * cm, y, str(petition.id) + "-" + name)
         c.drawString(10 * cm, y, tipo)
-        c.drawString(14 * cm, y, item)
-        c.drawString(18 * cm, y, created + "/" + until)
+        c.drawString(18 * cm, y, item)
+        c.drawString(22 * cm, y, created + "/" + until)
 
         c.setStrokeColor(gray)
         c.setLineWidth(0.3)
