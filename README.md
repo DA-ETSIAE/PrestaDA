@@ -1,5 +1,5 @@
 # PrestaDA
-Aplicación web para la gestión de préstamos de material en un entorno universitario. 
+Aplicación web para la gestión de préstamos de material en un entorno universitario.
 
 ## Setup
 El proyecto ha sido diseñado para usarse _exclusivamente_ con Docker. Aunque es posible ejecutarlo localmente (`python manage.py runserver`), esto no está soportado y seguramente lleve a errores. 
@@ -24,7 +24,8 @@ La aplicación **no** soporta la creación de cuentas, descarga la autentificaci
 
 Ver https://mozilla-django-oidc.readthedocs.io/en/stable/settings.html para una explicación detallada de cada variable.
 
-El callback es siempre `/oidc/callback` (p.ej. http://django:8000/oidc/callback/).
+> [!TIP]
+> El callback es siempre `/oidc/callback` (p.ej. http://django:8000/oidc/callback/).
 
 ### Variables de Entorno
 
