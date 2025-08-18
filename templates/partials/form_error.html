@@ -1,0 +1,28 @@
+{% for field in form %}
+    {% for error in field.errors %}
+    <article class="message is-danger is-light">
+        <div class="message-body">
+            <b style="font-variant: small-caps; text-transform: lowercase">{{ field.label_tag }}</b> {{ error }}
+        </div>
+    </article>
+    {% endfor %}
+{% endfor %}
+
+
+{% for e in form.non_field_errors %}
+    <article class="message is-danger is-light">
+        <div class="message-body">
+            {{ e }}
+        </div>
+    </article>
+{% endfor %}
+
+
+{% if error %}
+    <article class="message is-danger is-light">
+        <div class="message-body">
+            {{ error }}
+        </div>
+    </article>
+
+{% endif %}

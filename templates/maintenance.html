@@ -1,0 +1,16 @@
+{% extends '__base_external.html' %}
+{% load i18n %}
+{% block content %}
+
+           <h1 class="title is-1">{{ site_config.maintenance_title }}</h1>
+            <p class="subtitle is-4">{{ site_config.maintenance_description }}</p>
+              {% if request.user.is_authenticated %}
+                   <form action="{% url 'oidc_logout' %}" method="post" style="margin: 0;">
+                                {% csrf_token %}
+                                <input class="button is-primary is-light mx-4" type="submit" value="{% trans 'nav.logout' %}">
+                            </form>
+              {% else %}
+                <a href="{% url 'login' %}" class="button is-primary is-light mx-4">{% trans 'nav.login' %}</a>
+              {% endif %}
+
+{% endblock %}

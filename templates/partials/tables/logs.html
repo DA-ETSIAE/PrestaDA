@@ -1,0 +1,19 @@
+{% load i18n %}
+
+            {% for log in logs %}
+                <tr>
+                <td>{{ log.user.email }}</td>
+                <td>{{ log.audit_type }}</td>
+                <td>{{ log.description }}</td>
+                <td>{{ log.ip_address }} - {{ log.user_agent }}</td>
+                <td>{{ log.created_at|date:"H:i - d/m/Y"}}</td>
+                </tr>
+            {% endfor %}
+
+
+{% if logs.has_next %}
+    <tr hx-get="{% url 'logs' %}?p={{ logs.next_page_number }}" hx-trigger="revealed" hx-swap="outerHTML">
+    <td colspan="5">...</td>
+</tr>
+{% endif %}
+

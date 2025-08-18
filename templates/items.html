@@ -1,0 +1,46 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.item_list' %}{% endblock %}
+
+{% block content %}
+
+
+<div class="column">
+<div id="message"></div>
+              <div class="box" style="min-height: 400px;">
+                  <div class="field has-addons is-justify-content-center">
+        <div class="control has-icons-left" style="width: 100%;">
+            <input class="input is-link is-medium has-text-centered"
+                   type="text"
+                   name="s"
+                   placeholder="{% trans 'items.search' %}"
+                   hx-get="{% url 'items' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#table"
+                   data-theme="light">
+            <span class="icon is-small is-left">
+                <i class="iconoir-search"></i>
+            </span>
+        </div>
+    </div>
+                  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
+        <thead>
+            <tr>
+                <th>{% trans 'item.type' %}</th>
+                <th>{% trans 'item.code' %}</th>
+                <th>{% trans 'item.blocked' %}</th>
+                <th>{% trans 'item.available' %}</th>
+                <th>{% trans 'item.actions' %}</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="table">
+                  {% include 'partials/tables/items.html' %}
+        </tbody>
+                  </table>
+
+              </div>
+</div>
+{% endblock %}

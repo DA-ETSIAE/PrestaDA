@@ -1,0 +1,16 @@
+{% extends '__base_external.html' %}
+{% load i18n %}
+{% block content %}
+
+           <h1 class="title is-1">{% trans 'login' %}</h1>
+            <p class="subtitle is-4">{{ site_config.login_text }}</p>
+              {% if local_dev %}
+                   <form action="{% url 'local' %}" method="POST">
+                   {% csrf_token %}
+                   <button type="submit" class="button is-danger">{% trans "login.localdev.button" %}</button>
+                   </form>
+               {% endif %}
+                <a href="{% url 'oidc_authentication_init' %}" class="button is-link">{% trans "login.openid" %}</a>
+
+
+{% endblock %}

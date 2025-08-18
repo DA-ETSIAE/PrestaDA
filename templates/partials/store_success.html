@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<article class="message is-primary is-primary mb-2">
+    <div class="message-header">
+    <p>{% trans 'store.success' %}</p>
+    <button class="delete" aria-label="delete"></button>
+  </div>
+        <div class="message-body">
+            {% blocktrans %} Type {{ type }} requested! {% endblocktrans %}
+        </div>
+</article>

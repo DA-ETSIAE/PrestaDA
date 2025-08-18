@@ -1,0 +1,33 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.index' %}{% endblock %}
+
+{% block content %}
+<div class="container is-fluid py-5">
+ <div id="message"></div>
+    <div class="field has-addons is-justify-content-center">
+        <div class="control has-icons-left" style="width: 100%;">
+            <input class="input is-link is-medium has-text-centered"
+                   type="text"
+                   name="s"
+                   placeholder="{% trans 'store.search' %}"
+                   hx-get="{% url 'store' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#results"
+                   data-theme="light">
+            <span class="icon is-small is-left">
+                <i class="iconoir-search"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="columns is-multiline mt-4" id="results">
+        {% include 'partials/results.html' %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+

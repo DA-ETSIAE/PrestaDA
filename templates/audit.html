@@ -1,0 +1,46 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.user_list' %}{% endblock %}
+
+{% block content %}
+
+
+<div class="column">
+              <div class="box" style="min-height: 400px;">
+                  <div class="field has-addons is-justify-content-center">
+        <div class="control has-icons-left" style="width: 100%;">
+            <input class="input is-link is-medium has-text-centered"
+                   type="text"
+                   name="s"
+                   placeholder="{% trans 'logs.search' %}"
+                   hx-get="{% url 'logs' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#table">
+            <span class="icon is-small is-left">
+                <i class="iconoir-search    "></i>
+            </span>
+        </div>
+    </div>
+                  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
+        <thead>
+            <tr>
+                <th>{% trans 'log.user.email' %}</th>
+                <th>{% trans 'log.audit_type' %}</th>
+                <th>{% trans 'log.description' %}</th>
+                <th>{% trans 'log.user_agent' %}</th>
+                <th>{% trans 'log.created_at' %}</th>
+            </tr>
+        </thead>
+
+        <tbody id="table">
+                  {% include 'partials/tables/logs.html' %}
+        </tbody>
+                  </table>
+
+              </div>
+</div>
+
+
+
+{% endblock %}

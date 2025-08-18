@@ -1,0 +1,80 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.petition_profile' %}{% endblock %}
+
+{% block content %}
+<div class="column">
+<div id="message"></div>
+    <div class="box">
+    <form hx-post="{% url 'petition' petition.id %}" hx-target="#message"> {% csrf_token %}
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h4 class="subtitle is-4"> {{ petition.type.name }}
+                    {% if petition.is_pending %} <span class="tag is-warning is-medium"> <i class="iconoir-hourglass"></i></span>
+                    {% elif petition.is_active %} <span class="tag is-primary is-medium"><i class="iconoir-badge-check"></i></span>
+                    {% endif %} </h4>
+            </div>
+
+            <div class="column is-full">
+                <label class="has-text-weight-semibold">{% trans 'petition.item' %}
+                    {% if request.user.is_staff %}
+                    <div class="select is-fullwidth">
+                        <select name="item" class="is-fullwidth">
+                            {% for item in items %}
+                                <option {% if petition.item and petition.item == item %} selected{% endif %} value="{{ item.id }}">
+                                    {{ item.code }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div></label>
+                    {% else %}
+                         {% if petition.item %}  <p>{{ petition.item }}</p>  {% else %} <p>{% trans 'waiting' %}</p> {% endif %}
+                    {% endif %}
+
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'petition.date' %}</p>
+                <p>{{ petition.date|date:"d/m/Y H:i"  }}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'petition.until' %}</p>
+                <p>
+                   {% if request.user.is_staff %}
+                    <input name="until" type="date" class="input" min="{{ today|date:'Y-m-d' }}" max="2030-07-31"  {% if petition.until %} value="{{ petition.until|date:'Y-m-d' }}" {% endif %} />
+                    {% else %}
+                    {% if petition.until %} {{ petition.until }} {% else %} {% trans 'waiting' %} {% endif %} {% endif %}
+                </p>
+            </div>
+        </div>
+
+
+        <div class="field is-grouped">
+        {% if request.user.is_staff %}
+            {% if petition.is_pending %}
+                <p class="control">
+                    <button name="accept" value="true"  type="submit" class="button is-primary">{% trans 'petition.accept_and_save' %}</button>
+                </p>
+                <p class="control">
+                    <button name="accept" value="false" type="submit" class="button is-danger">{% trans 'petition.decline' %}</button>
+                </p>
+            {% elif petition.is_active %}
+                <p class="control">
+                    <button type="submit" class="button is-warning">{% trans 'petition.edit' %}</button>
+                    <button type="submit" name="collect" value="true" class="button is-primary">{% trans 'petition.collect' %}</button>
+                </p>
+            {% else %}
+
+            {% endif %}
+        {% endif %}
+            <p class="control">
+                    <a href="{% url 'print_petition' petition.id %}" class="button">{% trans 'petition.print' %}</a>
+            </p>
+
+</div>
+
+    </form>
+    </div>
+</div>
+{% endblock %}
+

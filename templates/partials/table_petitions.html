@@ -1,0 +1,66 @@
+{% load i18n %}
+
+<div class="field has-addons is-justify-content-center">
+        <div class="control has-icons-left" style="width: 100%;">
+            <input class="input is-link is-medium has-text-centered"
+                   type="text"
+                   name="s"
+                   placeholder="{% trans 'petitions.search' %}"
+                   hx-get="{% url 'petitions' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#table"
+                   hx-include="[name='pending_filter'], [name='active_filter'], [name='expired_filter'], [name='user_id']"
+                   data-theme="light">
+            <span class="icon is-small is-left">
+                <i class="iconoir-search"></i>
+            </span>
+        </div>
+    </div>
+
+           <div class="field is-justify-content-center mt-2">
+            <label class="checkbox">
+                <input type="checkbox"
+                       name="pending_filter"
+                       hx-get="{% url 'petitions' %}"
+                       hx-trigger="change"
+                       hx-target="#table"
+                       hx-include="[name='s'], [name='active_filter'], [name='expired_filter'], [name='user_id']">
+                {% trans 'petitions.not_pending_filter' %}
+            </label>
+            <label class="checkbox">
+                <input type="checkbox"
+                       name="active_filter"
+                       hx-get="{% url 'petitions' %}"
+                       hx-trigger="change"
+                       hx-target="#table"
+                       hx-include="[name='s'], [name='pending_filter'], [name='expired_filter'], [name='user_id']">
+                {% trans 'petitions.active_filter' %}
+            </label>
+            <label class="checkbox">
+                <input type="checkbox"
+                       name="expired_filter"
+                       hx-get="{% url 'petitions' %}"
+                       hx-trigger="change"
+                       hx-target="#table"
+                       hx-include="[name='s'], [name='pending_filter'], [name='active_filter'], [name='user_id']">
+                {% trans 'petitions.only_expired' %}
+            </label>
+            <a href="{% url 'print' %}" class="is-primary">{% trans 'print_range' %}</a>
+        </div>
+
+                  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
+        <thead>
+            <tr>
+                <th>{% trans 'petition.user' %}</th>
+                <th>{% trans 'petition.type' %}</th>
+                <th>{% trans 'petition.date' %}</th>
+                <th>{% trans 'petition.status' %}</th>
+                <th>{% trans 'petition.actions' %}</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="table">
+                  {% include 'partials/tables/petitions.html' %}
+        </tbody>
+                  </table>

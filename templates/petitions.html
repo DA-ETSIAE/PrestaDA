@@ -1,0 +1,17 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.petitions' %}{% endblock %}
+
+{% block content %}
+
+<div class="column">
+              <div class="box" style="min-height: 400px;">
+                {% include 'partials/table_petitions.html' %}
+              </div>
+</div>
+{% endblock %}
+
+
+
+

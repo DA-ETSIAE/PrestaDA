@@ -1,0 +1,48 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.validate' %}{% endblock %}
+
+
+{% block content %}
+<div class="column">
+    <div id="message"></div>
+
+    <div class="box">
+        <form hx-post="{% url 'validate' %}" hx-target="#message"> {% csrf_token %}
+
+
+            <div class="field">
+                 <label class="label">{% trans 'validate.dni' %}</label>
+                    <div class="control">
+                        <input type="text" class="input" name="dni"/>
+                    </div>
+            </div>
+
+            <div class="field">
+                 <label class="label">{% trans 'validate.pid' %}</label>
+                    <div class="control">
+                        <input type="number" class="input" name="pid"/>
+                    </div>
+            </div>
+
+            <div class="field">
+                 <label class="label">{% trans 'validate.hash' %}</label>
+                    <div class="control">
+                        <input type="text" class="input" name="hashed"/>
+                    </div>
+            </div>
+
+              <div class="control">
+    <button class="button is-link">{% trans 'ban.submit' %}</button>
+  </div>
+
+
+        </form>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

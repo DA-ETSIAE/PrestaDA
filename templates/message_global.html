@@ -1,0 +1,63 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.global_message' %}{% endblock %}
+
+{% block content %}
+<div class="column">
+<div id="message"></div>
+<div class="box">
+
+        <div class="column is-full">
+            <h4 class="subtitle is-4">
+                {% trans 'send_global' %}
+            </h4>
+        </div>
+
+        <form hx-post="{% url 'send_global' %}" hx-target="#message">
+            {% csrf_token %}
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'message.title' %}</p>
+                <p>
+                    <input name="title" type="text"
+                           class="input is-medium is-fullwidth"
+                           placeholder="{% trans 'messages.title' %}"
+                           {% if not request.user.is_superuser %} disabled {% endif %}/>
+                </p>
+            </div>
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'message.title' %}</p>
+                <p>
+                    <textarea name="content"
+                           class="input is-medium is-fullwidth"
+                              placeholder="{% trans 'messages.content' %}"> </textarea>
+                </p>
+            </div>
+
+             <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'item.blocked' %}</p>
+                <div class="select is-medium is-fullwidth">
+                    <select name="color" required>
+                        <option value="success" >{% trans 'green' %}</option>
+                        <option value="link" selected>{% trans 'blue' %}</option>
+                        <option value="danger" selected>{% trans 'red' %}</option>
+                        <option value="warning" selected>{% trans 'yellow' %}</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="column is-full">
+                <button type="submit"
+                        class="button is-primary is-medium is-fullwidth"
+                        {% if not request.user.is_superuser %} disabled {% endif %}>
+                    {% trans 'submit' %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

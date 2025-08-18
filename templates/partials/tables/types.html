@@ -1,0 +1,33 @@
+{% load i18n %}
+
+            {% for t in types %}
+                <tr>
+                <td>{{ t.name }}</td>
+                <td>
+  {% if t.is_blocked %}
+    <div class="tags has-addons">
+      <span class="tag is-danger is-medium">
+        <i class="iconoir-warning-square"></i>
+      </span>
+      <span class="tag is-medium">{% trans "blocked" %}</span>
+    </div>
+  {% else %}
+    <div class="tags has-addons">
+      <span class="tag is-primary is-medium">
+       <i class="iconoir-badge-check"></i>
+      </span>
+      <span class="tag is-medium">{% trans "available" %}</span>
+    </div>
+  {% endif %}</td>
+<td><a class="button is-link is-light" href="{% url 'type' t.id %}">{% trans 'type.view_profile' %}</a></td>
+                </tr>
+            {% endfor %}
+
+
+{% if petitions.has_next %}
+    <tr hx-get="{% url 'types' %}?p={{ petitions.next_page_number }}" hx-trigger="revealed" hx-swap="outerHTML">
+    <td colspan="5">...</td>
+</tr>
+{% endif %}
+
+

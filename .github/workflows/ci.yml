@@ -1,0 +1,27 @@
+name: Build Docker image
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+    build:
+      name: push to dockerhub
+      runs-on: ubuntu-24.04
+      steps:
+        - uses: actions/checkout@v2
+        - name: login to dockerhub
+          id: docker-hub
+          env:
+            username:  ${{vars.DOCKERHUB_USERNAME}}
+            password: ${{secrets.DOCKERHUB_PASSWORD}}
+          run: |
+            docker login -u $username -p $password
+        - name: build docker image
+          id: build-docker-image
+          run: |
+            ls -la
+            docker build . -f Dockerfile -t ${{vars.DOCKERHUB_USERNAME}}/prestamos:latest
+        - name: push docker image
+          id: push-docker-image
+          run: docker push ${{vars.DOCKERHUB_USERNAME}}/prestamos:latest

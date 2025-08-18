@@ -1,0 +1,11 @@
+{% load i18n %}
+<article class="message is-success">
+  <div class="message-body">
+      {% if msg %}
+        {{ msg }}
+      {% else %}
+        {% trans 'forms.success' %}
+      {% endif %}
+
+  </div>
+</article>

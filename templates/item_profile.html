@@ -1,0 +1,87 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.item_create' %}{% endblock %}
+
+{% block content %}
+<div class="column">
+<div id="message"></div>
+<div class="box">
+
+        <div class="column is-full">
+            <h4 class="subtitle is-4">
+                {{ item.code }}
+            </h4>
+        </div>
+
+        <form hx-post="{% url 'item' item.id %}" hx-target="#message">
+            {% csrf_token %}
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'item.code' %}</p>
+                <p>
+                    <input name="code" type="text"
+                           class="input is-medium is-fullwidth"
+                           value="{{ item.code }}"
+                           {% if not request.user.is_superuser %} disabled {% endif %}/>
+                </p>
+            </div>
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'item.notes' %}</p>
+                <p>
+                    <input name="notes" type="text"
+                           class="input is-medium is-fullwidth"
+                           {% if item.notes %}value="{{ item.notes }}"{% endif %}
+                           {% if not request.user.is_superuser %} disabled {% endif %} />
+                </p>
+            </div>
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'item.type' %}</p>
+                    <div class="select is-medium is-fullwidth">
+                        <select name="type" class="is-fullwidth" {% if not request.user.is_superuser %} disabled {% endif %}>
+                            {% for type in types %}
+                                <option value="{{ type.id }}" {% if item.type == type %} selected{% endif %}>
+                                    {{ type.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            </div>
+
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'item.blocked' %}</p>
+                <div class="select is-medium is-fullwidth">
+                    <select name="is_blocked"
+                            {% if not request.user.is_superuser %} disabled {% endif %}
+                            required>
+                        <option value="True" {% if item.is_blocked %} selected {% endif %}>{% trans 'Yes' %}</option>
+                        <option value="False" {% if not item.is_blocked %} selected {% endif %}>{% trans 'No' %}</option>
+                    </select>
+                </div>
+            </div>
+
+             <div class="field is-grouped">
+    <button type="submit"
+            class="button is-primary is-medium is-fullwidth"
+            {% if not request.user.is_superuser %} disabled {% endif %}>
+        {% trans 'submit' %}
+    </button>
+</div>
+</form>
+
+<form hx-post="{% url 'delete_item' %}" hx-target="#message"> {% csrf_token %}
+    <div class="mt-4">
+        <button type="submit" name="id"
+                class="button is-danger is-small" value="{{ item.id }}"
+                {% if not request.user.is_superuser %} disabled {% endif %}>
+            {% trans 'delete' %}
+        </button>
+    </div>
+</form>
+    </div>
+
+</div>
+{% endblock %}

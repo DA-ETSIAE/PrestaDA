@@ -1,0 +1,55 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.settings' %}{% endblock %}
+
+{% block content %}
+
+
+<div class="column">
+              <div class="box" style="min-height: 400px;">
+
+ <div id="message"></div>
+     <table class="table is-striped is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>{% trans 'config.node' %}</th>
+                <th>{% trans 'config.value' %}</th>
+                <th>{% trans 'config.description' %}</th>
+                {% if user.is_superuser %} <th>{% trans 'config.actions' %}</th> {% endif %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for config in configs %}
+                <tr>
+                <form hx-post="{% url 'config_update' config.node %}" hx-target="#message">
+                {% csrf_token %}
+                <td>{{ config.node }}</td>
+                <td>
+                    {% if user.is_superuser %}
+                        {% if config.is_bool %}
+                            <div class="select">
+                                <select name="value"  required>
+                                    <option value="True" {% if config.value == "True" %} selected {% endif %}>{% trans 'True' %}</option>
+                                    <option value="False" {% if config.value == "False" %} selected {% endif %}>{% trans 'False' %}</option>
+                                </select>
+                            </div>
+                        {% else %}
+                             <input name="value" class="input" type="text" value="{{ config.value }}" required />
+                         {% endif %}
+                    {% else %}
+                        {{ config.value }}
+                    {% endif %}
+                </td>
+                <td>{{ config.description }}</td>
+                {% if user.is_superuser %}  <td><input type="submit" class="button is-primary update-btn" value="{% trans 'config.save' %}"/>{% endif %}</form>
+            {% endfor %}
+    </table>
+
+              </div>
+</div>
+
+
+
+{% endblock %}

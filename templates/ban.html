@@ -1,0 +1,40 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.profile' %}{% endblock %}
+
+
+{% block content %}
+<div class="column">
+    <div id="message"></div>
+
+    <div class="box">
+        <form hx-post="{% url 'ban' target.id %}" hx-target="#message"> {% csrf_token %}
+            <div class="field">
+                 <label class="label">{% trans 'ban.target_id' %}</label>
+                    <div class="control">
+                        <input class="input" type="text" value="{{ target.username }}" disabled>
+                    </div>
+            </div>
+
+
+            <div class="field">
+                 <label class="label">{% trans 'ban.reason' %}</label>
+                    <div class="control">
+                        <textarea class="textarea" name="banned_reason"></textarea>
+                    </div>
+            </div>
+
+              <div class="control">
+    <button class="button is-link">{% trans 'ban.submit' %}</button>
+  </div>
+
+
+        </form>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

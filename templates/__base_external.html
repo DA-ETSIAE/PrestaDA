@@ -1,0 +1,49 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {{ site_config.app_name }} {% endblock %} | {{ site_config.org }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <style>
+      :root {
+        --aero-1: #0a2540;
+        --aero-2: #1e81b0;
+        --aero-3: #71c7ec;
+      }
+      body.bg-aero {
+        background: linear-gradient(135deg, var(--aero-1) 0%, var(--aero-2) 50%, var(--aero-3) 100%);
+        min-height: 100vh;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1rem;
+        padding: 2rem;
+      }
+      .title,
+      .subtitle {
+        color: #ffffff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      }
+    </style>
+  </head>
+
+  <body class="bg-aero">
+    <section class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="glass">
+
+            {% block content %} {% endblock %}
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </body>
+</html>

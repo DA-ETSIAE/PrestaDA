@@ -1,0 +1,51 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.global_message' %}{% endblock %}
+
+{% block content %}
+<div class="column">
+<div id="message"></div>
+<div class="box">
+
+        <div class="column is-full">
+            <h4 class="subtitle is-4">
+                {% trans 'send_msg_user' %}
+            </h4>
+        </div>
+
+        <form hx-post="{% url 'send_user' user.id %}" hx-target="#message">
+            {% csrf_token %}
+
+           <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'message.content' %}</p>
+                <p>
+                    <input name="user" type="text"
+                           class="input is-medium is-fullwidth"
+                           value="{{ user.username }}"
+                           disabled />
+                </p>
+            </div>
+
+            <div class="column is-full">
+                <p class="has-text-weight-semibold">{% trans 'message.content' %}</p>
+                <p>
+                    <input name="content" type="text"
+                           class="input is-medium is-fullwidth"
+                           placeholder="{% trans 'messages.content' %}"
+                           {% if not request.user.is_superuser %} disabled {% endif %}/>
+                </p>
+            </div>
+
+            <div class="column is-full">
+                <button type="submit"
+                        class="button is-primary is-medium is-fullwidth"
+                        {% if not request.user.is_superuser %} disabled {% endif %}>
+                    {% trans 'submit' %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

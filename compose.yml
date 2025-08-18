@@ -1,0 +1,70 @@
+services:
+ db:
+   image: postgres:17
+   container_name: prestamos-db
+   environment:
+     POSTGRES_DB: ${DATABASE_NAME}
+     POSTGRES_USER: ${DATABASE_USERNAME}
+     POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+   ports:
+     - "5432:5432"
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   healthcheck:
+     test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME}" ]
+     start_period: 5s
+     start_interval: 2s
+     interval: 30s
+     timeout: 5s
+     retries: 3
+   env_file:
+     - .env
+ 
+ app:
+   build: . # reemplazar por image: daetsiae/prestamos:latest en producción
+   container_name: prestamos-app
+   ports:
+     - "8000:8000"
+   depends_on:
+     db:
+      condition: service_healthy
+   environment:
+     PRESTAMOS_SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
+     PRESTAMOS_DEBUG: ${PRESTAMOS_DEBUG}
+     PRESTAMOS_LOGLEVEL: ${PRESTAMOS_LOGLEVEL}
+     PRESTAMOS_ALLOWED_HOSTS: ${PRESTAMOS_ALLOWED_HOSTS}
+     PRESTAMOS_LOCALMODE: ${PRESTAMOS_LOCALMODE}
+     EMAIL_HOST: ${EMAIL_HOST}
+     EMAIL_PORT: ${EMAIL_PORT}
+     EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+     EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+     EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+     EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+     DATABASE_ENGINE: ${DATABASE_ENGINE}
+     DATABASE_NAME: ${DATABASE_NAME}
+     DATABASE_USERNAME: ${DATABASE_USERNAME}
+     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+     DATABASE_HOST: ${DATABASE_HOST}
+     DATABASE_PORT: ${DATABASE_PORT}
+     OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+     OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+     OIDC_AUTH_ENDPOINT: ${OIDC_AUTH_ENDPOINT}
+     OIDC_TOKEN_ENDPOINT: ${OIDC_TOKEN_ENDPOINT}
+     OIDC_USERINFO_ENDPOINT: ${OIDC_USERINFO_ENDPOINT}
+     OIDC_LOGIN_REDIRECT_URL: ${OIDC_LOGIN_REDIRECT_URL}
+     OIDC_LOGOUT_REDIRECT_URL: ${OIDC_LOGOUT_REDIRECT_URL}
+     OIDC_RP_SIGN_ALGO: ${OIDC_RP_SIGN_ALGO}
+     OIDC_OP_JWKS_ENDPOINT: ${OIDC_OP_JWKS_ENDPOINT}
+     LOGIN_REDIRECT_URL_FAILURE: ${LOGIN_REDIRECT_URL_FAILURE}
+     OIDC_SCOPES: ${OIDC_SCOPES}
+
+
+   volumes:
+     - static_volume:/home/app/web/staticfiles
+   env_file:
+     - .env
+     
+volumes:
+   postgres_data:
+   static_volume: 
+

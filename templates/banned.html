@@ -1,0 +1,34 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {{ site_config.app_name }} {% endblock %} | {{ site_config.org }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+</head>
+
+
+      <body>
+        <section class="section is-fullheight">
+          <div class="container is-flex is-justify-content-center is-align-items-center" style="height: 100%;">
+            <div class="card" style="width: 350px;">
+              <div class="card-content">
+                <article class="message is-danger">
+  <div class="message-header">
+    <p>{% trans 'banned.banned' %} (<i class="iconoir-calendar"></i> {{ user.banned_at|date:"d/m/Y" }}) </p>
+  </div>
+  <div class="message-body"> {{ user.banned_reason }}
+  </div>
+</article>
+              </div>
+
+                  <footer class="card-footer">
+    <a href="mailto:{{ site_config.contact_email }}" class="card-footer-item">{% trans 'banned.appeal' %}</a>
+  </footer>
+            </div>
+          </div>
+        </section>
+</body>
+
+</html>
+

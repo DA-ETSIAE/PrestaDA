@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% for t in gestor_types %}
+<div class="column is-full-mobile is-half-tablet is-one-quarter-desktop">
+    <div class="card">
+        <header class="card-header is-flex is-justify-content-space-between is-align-items-center">
+            <p class="card-header-title">
+              {% if t.is_blocked %} <i class="iconoir-lock-square"></i>  {% endif %}  {{ t.name }}
+            </p>
+            {% if request.user.is_staff %} <a href="{% url 'type' t.id %}" class="button is-ghost">{% trans 'store.staff_view_profile' %}</a>  {% endif %}
+            <button class="card-header-icon" aria-label="toggle" onclick="toggleCard(this)">
+                <i class="iconoir-collapse"></i>
+            </button>
+        </header>
+        <div class="card-content pb-3">
+            <p class="mb-3">{{ t.description }}</p>
+            <footer class="modal-card-foot p-0 mt-2" style="flex-direction: column;">
+                {% if not t.is_blocked %}
+                    <form hx-post="{% url 'reserve' t.id %}" hx-target="#message" style="width: 100%;">
+                        {% csrf_token %}
+                        <input type="submit" class="button is-success is-small is-fullwidth" value="{% trans 'shop.get_it' %}" />
+                    </form>
+                {% else %}
+                    <button class="button is-danger is-small is-fullwidth" disabled style="width: 100%;">{% trans 'shop.blocked' %}</button>
+                {% endif %}
+            </footer>
+        </div>
+    </div>
+</div>
+{% endfor %}

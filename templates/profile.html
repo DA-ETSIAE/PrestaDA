@@ -1,0 +1,153 @@
+{% extends '__base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'titles.profile' %}{% endblock %}
+
+{% block content %}
+<div class="column">
+
+    {% if request.user.is_staff and request.user != user %}
+        {% if user.is_banned %}
+            <div class="notification is-danger">
+        <h4 class="title is-4">{% trans 'users.is_banned' %}</h4>
+        <p>{% trans 'users.user_is_banned' %}</p>
+    </div>
+        {% else %}
+    <div class="notification is-warning is-light">
+        <h4 class="title is-4">{% trans 'users.viewing_as_staff' %}</h4>
+        <p>{% trans 'users.not_your_profile_warning' %}</p>
+
+        <div class="field is-grouped">
+            <a class="button is-primary" href="{% url 'users' %}">{% trans 'users.back_to_list' %}</a>
+            <a class="button is-link" href="{% url 'profile' request.user.id %}">{% trans 'users.go_to_your_profile' %}</a>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+<div id="message"></div>
+
+    <div class="box">
+        <div class="columns is-multiline">
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.name' %}</p>
+                <p>{{ user.first_name }} {{ user.last_name }} ({{ user.username }})</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.email' %}</p>
+                <p>{{ user.email }}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.dni' %}</p>
+                <p class="{% if user.dni is None or user.is_new_user %} is-skeleton {% endif %}">{{ user.dni }}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.phone' %}</p>
+                <p class="{% if user.phone is None or user.is_new_user %} is-skeleton {% endif %}">{{ user.phone }}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.join_date' %}</p>
+                <p>{{ user.date_joined }}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.last_login' %}</p>
+                <p>{{ user.last_login }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_staff %}
+    <div class="box has-background-light">
+
+        <h4 class="subtitle is-4">{% trans 'user.staff_info' %}{% if user != request.user  %}
+            <a href="{% url 'send_user' user.id %}" class="tag is-primary">{% trans 'user.send_message' %}</a>
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'ban' user.id %}" class="tag is-danger">{% trans 'user.ban' %}</a>
+                        <form hx-post="{% url 'make_staff' %}" hx-target="#message">{% csrf_token %} <button type="submit" name="user" value="{{ user.id }}"  class="tag is-danger">{% if user.is_staff %} {% trans 'user.remove_staff' %} {% else %} {% trans 'user.make_staff' %} {% endif %}</button>  </form>
+                    {% endif %}{% endif %}
+        </h4>
+
+        <div class="columns is-multiline">
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.synced_with_siu' %}</p>
+                <p>{% if user.is_logged_by_sso %} {% trans 'yes' %} {% else %} {% trans 'no' %} {% endif %}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.is_staff' %}</p>
+                <p>{% if user.is_staff %} {% trans 'yes' %} {% else %} {% trans 'no' %} {% endif %}</p>
+            </div>
+            <div class="column is-half">
+                <p class="has-text-weight-semibold">{% trans 'user.is_admin' %}</p>
+                <p>{% if user.is_superuser %} {% trans 'yes' %} {% else %} {% trans 'no' %} {% endif %}</p>
+            </div>
+        </div>
+
+                 <input type="text"
+                       name="user_id"
+                       hx-get="{% url 'petitions' %}"
+                       hx-trigger="change"
+                       hx-target="#table"
+                       hx-include="[name='s'], [name='active_filter'], [name='pending_filter']" value="{{ user.id }}" style="display: none">
+
+                 {% include 'partials/table_petitions.html' %}
+
+    </div>
+    {% endif %}
+
+</div>
+
+
+
+{% if user.is_new_user and request.user == user  %}
+<div class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">{% trans 'profile.add_phone_dni' %}</p>
+        </header>
+        <form hx-post="{% url 'setup' %}" hx-target="#message">
+            <section class="modal-card-body">
+                {% csrf_token %}
+                <label>{% trans 'phone' %}
+                    <input class="input" name="phone" type="text" />
+                </label>
+                <label>{% trans 'dni' %}
+                    <input class="input" name="dni" type="text" />
+                </label>
+            </section>
+            <div class="modal-card-body" id="message"></div>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <input type="submit" class="button is-success" value="{% trans 'profile.finish_setup' %}" />
+                </div>
+            </footer>
+        </form>
+    </div>
+</div>
+
+<script> // adaptado de https://bulma.io/documentation/components/modal/
+document.addEventListener('DOMContentLoaded', () => {
+    // Functions to open and close a modal
+    function openModal(el) {
+        el.classList.add('is-active');
+    }
+
+    // Add click event on buttons to open a specific modal
+    document.querySelectorAll('.js-modal-trigger').forEach((trigger) => {
+        const modalId = trigger.dataset.target;
+        const target = document.getElementById(modalId);
+
+        trigger.addEventListener('click', () => {
+            openModal(target);
+        });
+    });
+
+    const firstModal = document.querySelector('.modal');
+    if (firstModal) {
+        openModal(firstModal);
+    }
+});
+</script>
+{% endif %}
+
+{% endblock %}
