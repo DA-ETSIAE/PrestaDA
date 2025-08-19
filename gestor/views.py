@@ -226,8 +226,8 @@ def petition(request, pid):
     if request.POST.get('accept') == 'false':
         petition.status = Petition.PetitionStatus.DECLINED
         petition.save()
-        if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
-                > Petition.objects.filter(type=type).filter(
+        if (Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count()
+                > Petition.objects.filter(type=petition.type).filter(
                     Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.PENDING) | Q(
                         status=Petition.PetitionStatus.EXPIRED)).count()):
             petition.type.is_blocked = False
@@ -241,20 +241,20 @@ def petition(request, pid):
             petition.date_reserved = timezone.now()
             petition.item.status = Item.ItemStatus.IN_USE
             petition.item.save()
-            cnt = _('Petition of %(type)s ACCEPTED') % {'type': type}
+            cnt = _('Petition of %(type)s ACCEPTED') % {'type': petition.type}
             petition.user.message(cnt)
 
         if petition.PetitionStatus.ACTIVE and request.POST.get('collect') == 'true':
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             petition.status = Petition.PetitionStatus.COLLECTED
-            if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
-                    > Petition.objects.filter(type=type).filter(
+            if (Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count()
+                    > Petition.objects.filter(type=petition.type).filter(
                         Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.PENDING) | Q(
                             status=Petition.PetitionStatus.EXPIRED)).count()):
                 petition.type.is_blocked = False
                 petition.type.save()
-            cnt = _('Petition of %(type)s COLLECTED') % {'type': type}
+            cnt = _('Petition of %(type)s COLLECTED') % {'type': petition.type}
             petition.user.message(cnt)
 
         neoitem = form.cleaned_data['item']
