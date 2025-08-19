@@ -40,7 +40,7 @@ msgstr "Pendiente"
 
 #: gestor/models.py:35
 msgid "Active"
-msgstr "Prestable"
+msgstr "Activa"
 
 #: gestor/models.py:36
 msgid "Expired"
@@ -59,7 +59,7 @@ msgstr "Préstamos Expirado"
 msgid "Your loan of %(type)s has expired"
 msgstr ""
 "Tu préstamos de un/a %(type)s ha expirado. Pasa por Delegación para "
-"devolverlo/a lo antes poisble."
+"devolverlo/a lo antes posible."
 
 #: gestor/views.py:46 gestor/views.py:112
 msgid "Updated"

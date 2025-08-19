@@ -194,6 +194,10 @@ def reserve(request, tid):
     petition = Petition.objects.create(type=type, user=user)
     petition.save()
 
+    if Item.objects.filter(type=petition.type).count() <= 1:
+        petition.type.is_blocked = True
+        petition.type.save()
+
     cnt = _('Petition of %(type)s created') % {'type': type}
     user.message(cnt)
 
@@ -220,6 +224,9 @@ def petition(request, pid):
     if request.POST.get('accept') == 'false':
         petition.status = Petition.PetitionStatus.DECLINED
         petition.save()
+        if Item.objects.filter(type=petition.type).count() >= 1 and petition.type.is_blocked:
+            petition.type.is_blocked = False
+            petition.type.save()
         return gu.handle_redirect(petition)
 
     form = SavePetitionForm(request.POST or None, instance=petition)
@@ -236,6 +243,9 @@ def petition(request, pid):
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             petition.status = Petition.PetitionStatus.COLLECTED
+            if Item.objects.filter(type=petition.type).count() >= 1 and petition.type.is_blocked:
+                petition.type.is_blocked = False
+                petition.type.save()
             cnt = _('Petition of %(type)s COLLECTED') % {'type': type}
             petition.user.message(cnt)
 
