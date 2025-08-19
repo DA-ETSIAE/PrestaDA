@@ -195,7 +195,8 @@ def reserve(request, tid):
     petition = Petition.objects.create(type=type, user=user)
     petition.save()
 
-    if Item.objects.filter(type=type).count() <= 1:
+    if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
+            <= Petition.objects.filter(type=type).filter(Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.PENDING) | Q(status=Petition.PetitionStatus.EXPIRED)).count()):
         type.is_blocked = True
         type.save()
 
@@ -225,7 +226,10 @@ def petition(request, pid):
     if request.POST.get('accept') == 'false':
         petition.status = Petition.PetitionStatus.DECLINED
         petition.save()
-        if Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count() >= 1 and petition.type.is_blocked:
+        if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
+                > Petition.objects.filter(type=type).filter(
+                    Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.PENDING) | Q(
+                        status=Petition.PetitionStatus.EXPIRED)).count()):
             petition.type.is_blocked = False
             petition.type.save()
         return gu.handle_redirect(petition)
@@ -244,7 +248,10 @@ def petition(request, pid):
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             petition.status = Petition.PetitionStatus.COLLECTED
-            if Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count() >= 1 and petition.type.is_blocked:
+            if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
+                    > Petition.objects.filter(type=type).filter(
+                        Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.PENDING) | Q(
+                            status=Petition.PetitionStatus.EXPIRED)).count()):
                 petition.type.is_blocked = False
                 petition.type.save()
             cnt = _('Petition of %(type)s COLLECTED') % {'type': type}
