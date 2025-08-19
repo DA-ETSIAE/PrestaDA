@@ -24,13 +24,13 @@
                     hx-get="{% url 'petitions' %}"
                     hx-target="#table"
                     hx-include="[name='s'], [name='user_id']">
+                        <option value="">{% trans 'petitions.filter_none' %}</option>
                         {% for value, label in statii %}
                         <option value="{{ value }}" >{{ label }}</option>
                         {% endfor %}
             </select>
            </div>
 
-            <a href="{% url 'print' %}" class="is-primary">{% trans 'print_range' %}</a>
         </div>
 
                   <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">

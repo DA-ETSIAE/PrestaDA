@@ -14,7 +14,8 @@ def send_message(user: User, content: str, is_from_staff: Optional[bool] = False
     message.save()
 
     if email_subject:
+        email_subject = '[' + Configuration.objects.get('org').value + '] ' + email_subject
         send_mail(email_subject, content, settings.EMAIL_HOST_USER, [user.email])
 
 def send_admin_message(content: str, email_subject: str):
-    send_mail(email_subject, content, Configuration.objects.get(node="smtp_email").value, [Configuration.objects.get(node="contact_email").value])
+    send_mail(email_subject, content, settings.EMAIL_HOST_USER , [Configuration.objects.get(node="contact_email").value])

@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
         defaults =[
             {
                 'node': 'app_name',
-                'value': 'Préstamos',
+                'value': 'PrestaDA',
                 'description': 'El nombre que aparece en la cabecera',
                 'is_bool': False,
             },
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             {
                 'node': 'maintenance_kind',
                 'value': 'False',
-                'description': 'Activa el modo mantenimiento simpático (error bonito)',
+                'description': 'Activa el modo mantenimiento simpático',
                 'is_bool': True,
             },
             {
@@ -71,35 +71,16 @@ class Migration(migrations.Migration):
             },
             {
                 'node': 'agreement_title',
-                'value': 'Título del contrato pdf',
-                'description': '',
+                'value': 'Acuerdo DA-ETSIAE',
+                'description': 'Título del contrato pdf',
                 'is_bool': False,
             },
             {
                 'node': 'agreement_header',
-                'value': 'Cabecera del contrato pdf',
-                'description': '',
+                'value': 'Acuerdo DA-ETSIAE',
+                'description': 'Cabecera del contrato pdf',
                 'is_bool': False,
             },
-            {
-                'node': 'smtp_email',
-                'value': '',
-                'description': '',
-                'is_bool': False,
-            },
-            {
-                'node': 'export_header',
-                'value': 'Header',
-                'description': '',
-                'is_bool': False,
-            },
-            {
-                'node': 'export_title',
-                'value': 'Title',
-                'description': '',
-                'is_bool': False,
-            },
-
         ]
 
         for config in defaults:

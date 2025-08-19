@@ -12,21 +12,28 @@ services:
      - postgres_data:/var/lib/postgresql/data
    healthcheck:
      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME}" ]
-     start_period: 5s
-     start_interval: 2s
+     start_period: 10s
      interval: 30s
-     timeout: 5s
-     retries: 3
+     timeout: 10s
+     retries: 5
    env_file:
      - .env
 
  rabbitmq:
    image: rabbitmq:alpine
    container_name: rabbitmq
-   # 5672
+   depends_on:
+     db:
+       condition: service_healthy
    environment:
      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+   healthcheck:
+    test: rabbitmq-diagnostics -q ping
+    start_period: 10s
+    interval: 30s
+    timeout: 10s
+    retries: 5
    env_file:
      - .env
 
@@ -35,7 +42,8 @@ services:
    container_name: worker
    command: celery -A prestamos worker -l info
    depends_on:
-     - rabbitmq
+     rabbitmq:
+       condition: service_healthy
    environment:
      DEBUG: 1
      SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
@@ -54,7 +62,7 @@ services:
    container_name: beat
    command: celery -A prestamos beat -l info
    depends_on:
-     - rabbitmq
+     - celery-worker
    environment:
      DEBUG: 1
      SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
@@ -74,8 +82,7 @@ services:
    ports:
      - "8000:8000"
    depends_on:
-     db:
-      condition: service_healthy
+     - celery-beat
    environment:
      PRESTAMOS_SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
      PRESTAMOS_DEBUG: ${PRESTAMOS_DEBUG}

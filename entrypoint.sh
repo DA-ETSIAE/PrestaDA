@@ -9,7 +9,6 @@ if [ "$1" = "celery" ]; then
 else
   BLUE="\e[34m"
   ENDCOLOR="\e[0m"
-
   echo -e "${BLUE} ============================================================== ${ENDCOLOR}"
 
   echo -e "${BLUE} Running migrations... ${ENDCOLOR}"

@@ -19,6 +19,7 @@ from celery.schedules import crontab
 from utils.environment import get_env_bool
 
 import gestor.tasks
+import usuarios.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -211,8 +212,12 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'rpc://')
 
 
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "gestor.tasks.check_expired",
-        "schedule": crontab(minute="*/30"),
+    "check_expired_petitions": {
+        "task": "gestor.tasks.check_expired_petitions",
+        "schedule": crontab(hour=12, minute=0),
+    },
+    "check_waiting_users": {
+        "task": "usuarios.tasks.check_waiting_users",
+        "schedule": crontab(hour=0, minute=0, day_of_week=1),
     },
 }

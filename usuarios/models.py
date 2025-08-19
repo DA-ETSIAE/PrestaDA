@@ -1,7 +1,12 @@
+from typing import Optional
+
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 from django.forms.models import ModelForm
+
+
+
 
 class User(AbstractUser):
     is_logged_by_sso = models.BooleanField(default=False)
@@ -27,6 +32,10 @@ class User(AbstractUser):
 
     def superuser_check(self):
         return self.is_superuser
+
+    def message(self, content: str, is_from_staff: Optional[bool], email_subject: Optional[str]):
+        from mensajes import utils
+        utils.send_message(self, content, is_from_staff=is_from_staff, email_subject=email_subject)
 
 
 class SetupForm(ModelForm):

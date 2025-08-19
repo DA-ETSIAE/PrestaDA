@@ -165,6 +165,8 @@
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.requests' %}</a></li>
                                 {% url 'users' as url %}
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.users' %}</a></li>
+                                {% url 'print' as url %}
+                                <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.print' %}</a></li>
                                 {% url 'validate' as url %}
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.validate' %}</a></li>
                             </ul>

@@ -65,13 +65,20 @@
                         </button>
                     </header>
                     <div class="card-content">
-                        {% if p.is_pending %}
+                        {% if p.status == status.PENDING %}
                             <article class="message is-warning">
                                 <div class="message-body">
                                     {% trans 'index.petition_pending' %}
                                 </div>
                             </article>
                         {% else %}
+                            {% if p.status == status.EXPIRED %}
+                              <article class="message is-warning">
+                                <div class="message-body">
+                                    {% trans 'index.petition_pending' %}
+                                </div>
+                              </article>
+                            {% endif %}
                             <div class="content has-text-centered">
                                 <p class="title is-5 mb-2">{{ p.item.code }}</p>
                                 {% if p.item.notes %} <article class="message is-info"> <div class="message-body">  {{ p.item.notes }} </div> </article> {% endif %}

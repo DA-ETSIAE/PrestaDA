@@ -74,7 +74,7 @@ def send_user(request, uid):
     if form.is_valid():
         message = form.cleaned_data['content']
         header = _('Admin Message')
-        utils.send_message(user, message, is_from_staff=True, email_subject=header)
+        user.message(message, is_from_staff=True, email_subject=header)
         create_audit(request, AuditLog.AuditTypes.CREATE, 'Messaged user')
         return render(request, 'partials/form_success.html')
 

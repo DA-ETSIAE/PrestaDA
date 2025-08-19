@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.db.models import Q
 from reportlab.lib import colors
 from reportlab.lib.colors import Color, HexColor, black, gray
 from reportlab.lib.pagesizes import A4, landscape
@@ -13,8 +14,7 @@ from utils.crypto import generate_hash
 
 
 def generate_invoice(response, petition: Petition):
-    pending = petition.is_pending
-    active = petition.is_active
+    status = petition.status
     date = petition.until
     item = petition.item.code if petition.item else None
     tipo = petition.type.name
@@ -68,7 +68,7 @@ def generate_invoice(response, petition: Petition):
             text_obj.textLine(line)
         c.drawText(text_obj)
 
-    if not pending and active:
+    if status == Petition.PetitionStatus.ACTIVE:
         c.setFont("Helvetica", 12)
         c.drawString(1.2*cm, 5*cm, "Firmado por " + name + " con DNI " + dni + ":")
 
@@ -77,9 +77,8 @@ def generate_invoice(response, petition: Petition):
         c.setFont("Courier-Bold", 12)
         c.drawString(1.2 * cm, 2 * cm - 1 * cm, str(petition.id) + "-" + generate_hash(dni, petition.id))
         c.setFont("Courier-Bold", 12)
-
-    if pending or not active:
-        watermark_text = "PENDIENTE" if pending else "NO VÁLIDA"
+    else:
+        watermark_text = "NO VÁLIDA"
         c.saveState()
         c.setFont("Helvetica-Bold", 60)
         c.setFillColor(Color(0.5, 0.5, 0.5, alpha=0.3))
@@ -99,6 +98,8 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
     else:
         petitions = Petition.objects.filter(until__date__range=(start_date, end_date))
 
+
+    petitions.filter(Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.EXPIRED) | Q(status=Petition.PetitionStatus.COLLECTED) )
     c = canvas.Canvas(response, pagesize=landscape(A4))
     width, height = landscape(A4)
 

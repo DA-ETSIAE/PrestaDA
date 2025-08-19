@@ -25,7 +25,7 @@ from . import utils as gu
 
 @user_passes_test(User.staff_check, login_url='login')
 def items(request):
-    return table_helper(request, Item, ['code', 'type__name' ], 'id', 5, 'items.html', 'partials/tables/items.html', 'items')
+    return table_helper(request, Item, ['code', 'type__name' ], 'id', 20, 'items.html', 'partials/tables/items.html', 'items')
 
 @user_passes_test(User.staff_check, login_url='login')
 def item_profile(request, iid):
@@ -152,9 +152,14 @@ def delete_type(request):
 @login_required(login_url='login')
 def petitions(request):
     user_id = request.GET.get('user_id')
-    status = request.GET.get('status')
+    status = request.GET.get('status') or None
 
     if not user_id:
+        if status is None:
+            return table_helper_status(request, Petition,
+                                       ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username',
+                                        'item__code'],
+                                       '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions')
         return table_helper_status(request, Petition,
                        ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
                        '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions', add_filters={'status': status})
@@ -190,7 +195,7 @@ def reserve(request, tid):
     petition.save()
 
     cnt = _('Petition of %(type)s created') % {'type': type}
-    utils.send_message(user, cnt)
+    user.message(cnt)
 
     return render(request, 'partials/store_success.html', {'type': type.name})
 
@@ -219,23 +224,23 @@ def petition(request, pid):
 
     form = SavePetitionForm(request.POST or None, instance=petition)
     if form.is_valid():
-        print('Valida')
         if petition.PetitionStatus.PENDING:
-            print('Penditente')
             petition.status = Petition.PetitionStatus.ACTIVE
             petition.date_reserved = timezone.now()
             petition.item.status = Item.ItemStatus.IN_USE
             petition.item.save()
+            cnt = _('Petition of %(type)s ACCEPTED') % {'type': type}
+            petition.user.message(cnt)
 
         if petition.PetitionStatus.ACTIVE and request.POST.get('collect') == 'true':
-            print('Collect')
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             petition.status = Petition.PetitionStatus.COLLECTED
+            cnt = _('Petition of %(type)s COLLECTED') % {'type': type}
+            petition.user.message(cnt)
 
         neoitem = form.cleaned_data['item']
         if neoitem != petition.item:
-            print('Item cambiado')
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             neoitem.status = Item.ItemStatus.IN_USE
@@ -243,7 +248,6 @@ def petition(request, pid):
             neoitem.save()
 
         petition.save()
-        print('Handle redirect')
         return gu.handle_redirect(petition)
 
     return render(request, 'partials/form_error.html', {'form': form})

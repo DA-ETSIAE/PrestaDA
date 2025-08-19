@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 import configuracion.models
-from gestor.models import Petition, Type as GestorType
+from gestor.models import Petition, Type as GestorType, Item
 from mensajes.models import UserMessage, GlobalMessage
 from utils import pdfs
 from utils.colors import match_color
@@ -28,7 +28,9 @@ def index(request):
             user_petition.percent = percent
             user_petition.color = match_color(percent)
 
-    return render(request, 'index.html', {'user_petitions': user_petitions, 'user_messages': user_messages, 'global_messages': global_messages, 'message_count': len(user_messages)})
+    return render(request, 'index.html', {'user_petitions': user_petitions,
+                                          'user_messages': user_messages, 'global_messages': global_messages,
+                                          'message_count': len(user_messages), 'status': Petition.PetitionStatus})
 
 @login_required(login_url='login')
 def store(request):
@@ -37,6 +39,10 @@ def store(request):
 
     if search:
         types = types.filter(Q(name__icontains=search) | Q(description__icontains=search))
+
+    for type in types:
+        if not type.is_blocked:
+            type.item_count = Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
 
     if request.headers.get("HX-Request") == "true":
         return render(request, 'partials/results.html', {'gestor_types': types})
