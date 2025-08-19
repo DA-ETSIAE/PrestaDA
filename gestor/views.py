@@ -153,22 +153,17 @@ def delete_type(request):
 def petitions(request):
     user_id = request.GET.get('user_id')
     status = request.GET.get('status') or None
+    columns = ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code']
+    kwargs = {}
 
-    if not user_id:
-        if status is None:
-            return table_helper_status(request, Petition,
-                                       ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username',
-                                        'item__code'],
-                                       '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions')
-        return table_helper_status(request, Petition,
-                       ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
-                       '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions', add_filters={'status': status})
+    if user_id:
+        kwargs['user'] = User.objects.get(id=user_id)
 
-    user = User.objects.get(id=user_id)
-    return table_helper_status(request, Petition,
-                     ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
-                    '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions', add_filters={'status': status},
-                               user=user)
+    if status is not None:
+        kwargs['add_filters'] = {'status': status}
+
+    return table_helper_status(request, Petition, columns,'-id',20,'petitions.html',
+                               'partials/tables/petitions.html', 'petitions', **kwargs)
 
 
 @login_required(login_url='login')
