@@ -5,7 +5,7 @@
     <div class="card">
         <header class="card-header is-flex is-justify-content-space-between is-align-items-center">
             <p class="card-header-title">
-              {% if t.is_blocked %} <i class="iconoir-lock-square"></i>  {% endif %}  {{ t.name }} <i class="iconoir-shop"></i> {{ t.item_count }}
+               {{ t.name }} {% if t.is_blocked %} <i class="iconoir-lock-square"></i> {%  else %}<i class="iconoir-shop"></i> {{ t.item_count }}{% endif %}
             </p>
             {% if request.user.is_staff %} <a href="{% url 'type' t.id %}" class="button is-ghost">{% trans 'store.staff_view_profile' %}</a>  {% endif %}
             <button class="card-header-icon" aria-label="toggle" onclick="toggleCard(this)">
