@@ -191,12 +191,13 @@ def reserve(request, tid):
     if type.is_blocked is True:
         return render(request, 'partials/store_error.html', {'error': _('errors.blocked_type')})
 
+
     petition = Petition.objects.create(type=type, user=user)
     petition.save()
 
-    if Item.objects.filter(type=petition.type).count() <= 1:
-        petition.type.is_blocked = True
-        petition.type.save()
+    if Item.objects.filter(type=type).count() <= 1:
+        type.is_blocked = True
+        type.save()
 
     cnt = _('Petition of %(type)s created') % {'type': type}
     user.message(cnt)
@@ -224,7 +225,7 @@ def petition(request, pid):
     if request.POST.get('accept') == 'false':
         petition.status = Petition.PetitionStatus.DECLINED
         petition.save()
-        if Item.objects.filter(type=petition.type).count() >= 1 and petition.type.is_blocked:
+        if Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count() >= 1 and petition.type.is_blocked:
             petition.type.is_blocked = False
             petition.type.save()
         return gu.handle_redirect(petition)
@@ -243,7 +244,7 @@ def petition(request, pid):
             petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
             petition.status = Petition.PetitionStatus.COLLECTED
-            if Item.objects.filter(type=petition.type).count() >= 1 and petition.type.is_blocked:
+            if Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count() >= 1 and petition.type.is_blocked:
                 petition.type.is_blocked = False
                 petition.type.save()
             cnt = _('Petition of %(type)s COLLECTED') % {'type': type}

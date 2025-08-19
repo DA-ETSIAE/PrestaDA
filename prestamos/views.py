@@ -40,10 +40,6 @@ def store(request):
     if search:
         types = types.filter(Q(name__icontains=search) | Q(description__icontains=search))
 
-    for type in types:
-        if not type.is_blocked:
-            type.item_count = Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
-
     if request.headers.get("HX-Request") == "true":
         return render(request, 'partials/results.html', {'gestor_types': types})
 
