@@ -33,7 +33,7 @@ class User(AbstractUser):
     def superuser_check(self):
         return self.is_superuser
 
-    def message(self, content: str, is_from_staff: Optional[bool], email_subject: Optional[str]):
+    def message(self, content: str, is_from_staff: Optional[bool] = False, email_subject: Optional[str] = None):
         from mensajes import utils
         utils.send_message(self, content, is_from_staff=is_from_staff, email_subject=email_subject)
 
