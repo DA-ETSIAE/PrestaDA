@@ -153,7 +153,6 @@ def delete_type(request):
 def petitions(request):
     user_id = request.GET.get('user_id')
     status = request.GET.get('status')
-    today = timezone.now()
 
     if not user_id:
         return table_helper_status(request, Petition,
@@ -163,7 +162,7 @@ def petitions(request):
     user = User.objects.get(id=user_id)
     return table_helper_status(request, Petition,
                      ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
-                    '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions',
+                    '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions', add_filters={'status': status},
                                user=user)
 
 

@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from audit.models import AuditLog
 from audit.utils import create_audit
+from gestor.models import Petition
 from prestamos import settings
 from usuarios.models import User, SetupForm, BanForm
 from utils.environment import get_env_bool
@@ -44,9 +45,10 @@ def users(request):
 @login_required(login_url='login')
 def profile_id(request, pid):
     user = User.objects.get(id=pid)
+    statii = Petition.PetitionStatus.choices
     if user is None or (user.id != request.user.id and not request.user.is_staff):
         return Http404
-    return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html', {'user': user, 'statii': statii})
 
 @login_required
 def profile(request):

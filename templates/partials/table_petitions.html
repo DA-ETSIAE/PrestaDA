@@ -9,7 +9,7 @@
                    hx-get="{% url 'petitions' %}"
                    hx-trigger="keyup changed delay:300ms"
                    hx-target="#table"
-                   hx-include="[name='status']"
+                   hx-include="[name='status'], [name='user_id']"
                    data-theme="light">
             <span class="icon is-small is-left">
                 <i class="iconoir-search"></i>
@@ -23,7 +23,7 @@
                     hx-trigger="change"
                     hx-get="{% url 'petitions' %}"
                     hx-target="#table"
-                    hx-include="[name='s']">
+                    hx-include="[name='s'], [name='user_id']">
                         {% for value, label in statii %}
                         <option value="{{ value }}" >{{ label }}</option>
                         {% endfor %}
