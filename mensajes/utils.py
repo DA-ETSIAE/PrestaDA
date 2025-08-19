@@ -14,7 +14,7 @@ def send_message(user: User, content: str, is_from_staff: Optional[bool] = False
     message.save()
 
     if email_subject:
-        email_subject = '[' + Configuration.objects.get('org').value + '] ' + email_subject
+        email_subject = '[PrestaDA] ' + email_subject
         send_mail(email_subject, content, settings.EMAIL_HOST_USER, [user.email])
 
 def send_admin_message(content: str, email_subject: str):

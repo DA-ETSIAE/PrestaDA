@@ -210,7 +210,7 @@ msgstr "Usuarios"
 
 #: templates/__base.html:169
 msgid "menu.print"
-msgstr "Imrpimir"
+msgstr "Impimir"
 
 #: templates/__base.html:171
 msgid "menu.validate"
