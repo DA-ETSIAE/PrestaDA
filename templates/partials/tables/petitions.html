@@ -2,47 +2,10 @@
 
             {% for p in petitions %}
                 <tr>
+                <td><b>{{ p.type }}</b> {% if p.item %}({{ p.item.code }}){% endif %}</td>
+                <td> {{ p.status }} </td>
                 <td>{{ p.user }}</td>
-                <td>{{ p.type }} {% if p.item %} {{ p.item.code }} {% endif %}</td>
                 <td>{{ p.date|date:"d/m/Y H:i"  }}</td>
-                   <td>
-    {% if p.is_active %}
-        <div class="tags has-addons">
-        {% now "Y-m-d" as today %}
-          {% if today < p.until|date:"Y-m-d" %}
-            <span class="tag is-primary is-medium">
-                <i class="iconoir-play"></i>
-            </span>
-          {% else %}
-              <span class="tag is-link is-medium">
-                <i class="iconoir-clock-rotate-right"></i>
-            </span>
-          {% endif %}
-            <span class="tag is-medium">
-                  <i class="iconoir-calendar"></i>
-                 {{ p.until|date:"d/m/Y" }}
-            </span>
-        </div>
-    {% elif p.is_pending %}
-        <div class="tags has-addons">
-            <span class="tag is-warning is-medium">
-                <i class="iconoir-hourglass"></i>
-            </span>
-            <span class="tag is-medium">
-                {% trans 'waiting' %}
-            </span>
-        </div>
-    {% else %}
-        <div class="tags has-addons">
-            <span class="tag is-danger is-medium">
-                <i class="iconoir-eye-closed"></i>
-            </span>
-            <span class="tag is-medium">
-                {% trans 'off' %}
-            </span>
-        </div>
-    {% endif %}
-</td>
                 <td><a class="button is-link is-light" href="{% url 'petition' p.id %}">{% trans 'petition.view_profile' %}</a></td>
                 </tr>
             {% endfor %}

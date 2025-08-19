@@ -24,4 +24,4 @@ class SaveTypeForm(ModelForm):
 class SaveItemForm(ModelForm):
     class Meta:
         model = Item
-        fields = ['code', 'type', 'notes', 'is_blocked']
+        fields = ['code', 'type', 'notes', 'status']

@@ -1,45 +1,12 @@
 {% load i18n %}
 
-            {% for t in items %}
+            {% for i in items %}
                 <tr>
-                <td>{{ t.type.name }}</td>
-                <td>{{ t.code }}</td>
-                <td>
-  {% if t.is_blocked %}
-    <div class="tags has-addons">
-      <span class="tag is-danger is-medium">
-        <i class="iconoir-warning-square"></i>
-      </span>
-      <span class="tag is-medium">{% trans "blocked" %}</span>
-    </div>
-  {% else %}
-    <div class="tags has-addons">
-      <span class="tag is-primary is-medium">
-        <i class="iconoir-badge-check"></i>
-      </span>
-      <span class="tag is-medium">{% trans "not_blocked" %}</span>
-    </div>
-  {% endif %}
-</td>
+                <td>{{ i.type.name }}</td>
+                <td>{{ i.code }}</td>
+                <td> {{ i.status }} </td>
 
-<td>
-  {% if not t.is_available %}
-    <div class="tags has-addons">
-      <span class="tag is-danger is-medium">
-        <i class="iconoir-warning-square"></i>
-      </span>
-      <span class="tag is-medium">{% trans "not_available" %}</span>
-    </div>
-  {% else %}
-    <div class="tags has-addons">
-      <span class="tag is-primary is-medium">
-        <i class="iconoir-badge-check"></i>
-      </span>
-      <span class="tag is-medium">{% trans "available" %}</span>
-    </div>
-  {% endif %}
-</td>
- <td><a class="button is-link is-light" href="{% url 'item' t.id %}">{% trans 'item.view_profile' %}</a> </td>
+ <td><a class="button is-link is-light" href="{% url 'item' i.id %}">{% trans 'item.view_profile' %}</a> </td>
                 </tr>
             {% endfor %}
 

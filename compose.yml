@@ -19,6 +19,54 @@ services:
      retries: 3
    env_file:
      - .env
+
+ rabbitmq:
+   image: rabbitmq:alpine
+   container_name: rabbitmq
+   # 5672
+   environment:
+     RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+   env_file:
+     - .env
+
+ celery-worker:
+   build: .
+   container_name: worker
+   command: celery -A prestamos worker -l info
+   depends_on:
+     - rabbitmq
+   environment:
+     DEBUG: 1
+     SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
+     PRESTAMOS_ALLOWED_HOSTS: ${PRESTAMOS_ALLOWED_HOSTS}
+     DATABASE_ENGINE: ${DATABASE_ENGINE}
+     DATABASE_NAME: ${DATABASE_NAME}
+     DATABASE_USERNAME: ${DATABASE_USERNAME}
+     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+     DATABASE_HOST: ${DATABASE_HOST}
+     DATABASE_PORT: ${DATABASE_PORT}
+   env_file:
+     - .env
+
+ celery-beat:
+   build: .
+   container_name: beat
+   command: celery -A prestamos beat -l info
+   depends_on:
+     - rabbitmq
+   environment:
+     DEBUG: 1
+     SECRET_KEY: ${PRESTAMOS_SECRET_KEY}
+     PRESTAMOS_ALLOWED_HOSTS: ${PRESTAMOS_ALLOWED_HOSTS}
+     DATABASE_ENGINE: ${DATABASE_ENGINE}
+     DATABASE_NAME: ${DATABASE_NAME}
+     DATABASE_USERNAME: ${DATABASE_USERNAME}
+     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+     DATABASE_HOST: ${DATABASE_HOST}
+     DATABASE_PORT: ${DATABASE_PORT}
+   env_file:
+     - .env
  
  app:
    build: . # reemplazar por image: daetsiae/prestamos:latest en producción
@@ -57,8 +105,8 @@ services:
      OIDC_OP_JWKS_ENDPOINT: ${OIDC_OP_JWKS_ENDPOINT}
      LOGIN_REDIRECT_URL_FAILURE: ${LOGIN_REDIRECT_URL_FAILURE}
      OIDC_SCOPES: ${OIDC_SCOPES}
-
-
+     CELERY_BROKER_URL:
+     CELERY_RESULT_BACKEND:
    volumes:
      - static_volume:/home/app/web/staticfiles
    env_file:
@@ -66,5 +114,6 @@ services:
      
 volumes:
    postgres_data:
-   static_volume: 
+   static_volume:
+
 

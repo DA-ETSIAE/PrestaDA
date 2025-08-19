@@ -10,7 +10,7 @@
 
     {% for notif in global_messages %}
         <article class="message is-{{ notif.color }}">
-            {% if notif.has_title is True %}
+            {% if notif.title %}
                 <div class="message-header">
                     <p><i class="iconoir-bell-notification"></i> {{ notif.title }}</p>
                 </div>

@@ -14,9 +14,11 @@ from pathlib import Path
 import os
 
 import mozilla_django_oidc.views
-
+from celery.schedules import crontab
 
 from utils.environment import get_env_bool
+
+import gestor.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -202,3 +204,15 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = get_env_bool('EMAIL_USE_TLS')
 EMAIL_USE_SSL = get_env_bool('EMAIL_USE_SSL')
+
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'amqp://user:password@rabbitmq:5672//')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'rpc://')
+
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "gestor.tasks.check_expired",
+        "schedule": crontab(minute="*/30"),
+    },
+}

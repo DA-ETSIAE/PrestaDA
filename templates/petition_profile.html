@@ -51,14 +51,14 @@
 
         <div class="field is-grouped">
         {% if request.user.is_staff %}
-            {% if petition.is_pending %}
+            {% if petition.status == status.PENDING %}
                 <p class="control">
                     <button name="accept" value="true"  type="submit" class="button is-primary">{% trans 'petition.accept_and_save' %}</button>
                 </p>
                 <p class="control">
                     <button name="accept" value="false" type="submit" class="button is-danger">{% trans 'petition.decline' %}</button>
                 </p>
-            {% elif petition.is_active %}
+            {% elif petition.status == status.ACTIVE %}
                 <p class="control">
                     <button type="submit" class="button is-warning">{% trans 'petition.edit' %}</button>
                     <button type="submit" name="collect" value="true" class="button is-primary">{% trans 'petition.collect' %}</button>

@@ -30,7 +30,6 @@ urlpatterns = [
     path('reserve/<int:tid>', gestor_views.reserve, name="reserve"),
     path('', include("usuarios.urls")),
     path('config/', include('configuracion.urls')),
-    path('about/', views.about, name='about'),
     path('manager/', include('gestor.urls')),
     path('msg/', include('mensajes.urls')),
     path('audit/', include('audit.urls')),

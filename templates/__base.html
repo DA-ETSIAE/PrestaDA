@@ -123,7 +123,7 @@
                         <div class="buttons">
                             <form action="{% url 'oidc_logout' %}" method="post" style="margin: 0;">
                                 {% csrf_token %}
-                                <input class="button is-primary mx-4" type="submit" value="{% trans 'nav.logout' %}">
+                                <input class="button is-primary is-light mx-4" type="submit" value="{% trans 'nav.logout' %}">
                             </form>
                         </div>
                     </div>

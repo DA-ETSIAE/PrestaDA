@@ -42,7 +42,7 @@
                     <div class="select is-medium is-fullwidth">
                         <select name="type" class="is-fullwidth" {% if not request.user.is_superuser %} disabled {% endif %}>
                             {% for type in types %}
-                                <option value="{{ type.id }}">
+                                <option value="{{ type.id }}" {% if item.type == type %} selected{% endif %}>
                                     {{ type.name }}
                                 </option>
                             {% endfor %}
@@ -54,11 +54,10 @@
             <div class="column is-full">
                 <p class="has-text-weight-semibold">{% trans 'item.blocked' %}</p>
                 <div class="select is-medium is-fullwidth">
-                    <select name="is_blocked"
-                            {% if not request.user.is_superuser %} disabled {% endif %}
-                            required>
-                        <option value="True" >{% trans 'Yes' %}</option>
-                        <option value="False" selected>{% trans 'No' %}</option>
+                    <select name="status" required>
+                        {% for value, label in statii %}
+                        <option value="{{ value }}" >{{ label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

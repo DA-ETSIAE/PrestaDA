@@ -16,7 +16,7 @@
             <p class="mb-3">{{ t.description }}</p>
             <footer class="modal-card-foot p-0 mt-2" style="flex-direction: column;">
                 {% if not t.is_blocked %}
-                    <form hx-post="{% url 'reserve' t.id %}" hx-target="#message" style="width: 100%;">
+                    <form hx-post="{% url 'reserve' t.id %}" hx-target="#message" hx-swap="afterend" style="width: 100%;">
                         {% csrf_token %}
                         <input type="submit" class="button is-success is-small is-fullwidth" value="{% trans 'shop.get_it' %}" />
                     </form>

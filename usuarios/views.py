@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
+from audit.models import AuditLog
 from audit.utils import create_audit
 from prestamos import settings
 from usuarios.models import User, SetupForm, BanForm
@@ -30,7 +31,7 @@ def local_login(request):
         user.is_local_user = True
         user.save()
         login(request, user)
-        create_audit(request, "URGENT", 'local_login ')
+        create_audit(request, AuditLog.AuditTypes.URGENT, 'local_login ')
         return redirect('index')
     else:
         return HttpResponse(status=403)
@@ -88,7 +89,7 @@ def ban(request, pid):
         target.banned_at = timezone.now()
         target.is_banned = True
         target.save()
-        create_audit(request, "CREATE", 'ban ' + target.username)
+        create_audit(request, AuditLog.AuditTypes.UPDATE, 'Banned ' + target.username)
         response = HttpResponse()
         response['HX-Redirect'] = reverse('profile', args=[target.id])
         return response
@@ -111,7 +112,7 @@ def make_staff(request):
     if user is None:
         return render(request, 'partials/form_error.html', {'error': _('user invalid')})
 
-    create_audit(request, "CREATE", 'make_staff')
+    create_audit(request, AuditLog.AuditTypes.UPDATE, 'Made staff ' + user.username)
     user.is_staff = not user.is_staff
     user.save()
     response = HttpResponse()

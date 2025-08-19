@@ -107,7 +107,7 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
     c.drawString(1 * cm, y, "Nombre")
     c.drawString(10 * cm, y, "Tipo")
     c.drawString(18 * cm, y, "Código")
-    c.drawString(22 * cm, y, "Fecha (Creada/Aceptada)")
+    c.drawString(22 * cm, y, "Fecha (Desde / Hasta)")
 
     c.setFont("Helvetica", 11)
     y -= 1 * cm
@@ -115,13 +115,13 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
         name = petition.user.username
         tipo = petition.type.name
         item = petition.item.code if petition.item else ""
-        created = petition.date_reserved.strftime("%d-%m-%Y") if petition.date_reserved else ""
-        until = petition.until.strftime("%d-%m-%Y") if petition.until else ""
+        date_reserved = petition.date_reserved.strftime("%Y-%m-%d") if petition.date_reserved else ""
+        until = petition.until.strftime("%Y-%m-%d") if petition.until else ""
 
         c.drawString(1 * cm, y, str(petition.id) + "-" + name)
         c.drawString(10 * cm, y, tipo)
         c.drawString(18 * cm, y, item)
-        c.drawString(22 * cm, y, created + "/" + until)
+        c.drawString(22 * cm, y, date_reserved + " a " + until)
 
         c.setStrokeColor(gray)
         c.setLineWidth(0.3)

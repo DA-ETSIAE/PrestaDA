@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.paginator import Paginator
 from django.db.models import F, Value, Q
 from django.db.models.functions import Concat
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from audit.models import AuditLog
 from audit.utils import create_audit
 from gestor.forms import SavePetitionForm, ValidateForm, SaveTypeForm, SaveItemForm
 from gestor.models import Item, Type, Petition
@@ -19,8 +20,8 @@ from mensajes.models import UserMessage
 from usuarios.models import User
 from utils import pdfs
 from utils.crypto import generate_hash
-from utils.table_helper import table_helper
-
+from utils.table_helper import table_helper, table_helper_status
+from . import utils as gu
 
 @user_passes_test(User.staff_check, login_url='login')
 def items(request):
@@ -35,14 +36,15 @@ def item_profile(request, iid):
 
     if request.method != 'POST':
         types = Type.objects.all()
-        return render(request, 'item_profile.html', {'item': item, 'types': types})
+        statii = Item.ItemStatus.choices
+        return render(request, 'item_profile.html', {'item': item, 'types': types, 'statii': statii})
 
     form = SaveItemForm(request.POST or None, instance=item)
-
     if form.is_valid():
-        create_audit(request, "UPDATE", 'item_profile ' + item.code)
+        create_audit(request, AuditLog.AuditTypes.UPDATE, 'Updated User profile')
         form.save()
         return render(request, 'partials/form_success.html', {'msg': _('Updated')})
+
     return render(request, 'partials/form_error.html', {'form': form})
 
 
@@ -50,11 +52,12 @@ def item_profile(request, iid):
 def new_item(request):
     if request.method != 'POST':
         types = Type.objects.all()
-        return render(request, 'item_create.html', {'types': types})
+        statii = Item.ItemStatus.choices
+        return render(request, 'item_create.html', {'types': types, 'statii': statii})
 
     form = SaveItemForm(request.POST)
     if form.is_valid():
-        create_audit(request, "CREATE", 'new_item ' + form.cleaned_data['code'])
+        create_audit(request, AuditLog.AuditTypes.CREATE, 'Created Item')
         form.save()
         response = HttpResponse()
         response['HX-Redirect'] = reverse('items')
@@ -73,10 +76,10 @@ def delete_item(request):
     if not item:
         return render(request, 'partials/form_error.html', {'error': _('Item invalid')})
 
-    if not item.is_available:
+    if item.status == Item.ItemStatus.IN_USE:
         return render(request, 'partials/form_error.html', {'error': _('Item assigned')})
 
-    create_audit(request, "REMOVE", 'delete_item ' + item.code)
+    create_audit(request, AuditLog.AuditTypes.DELETE, 'Deleted item')
     item.delete()
     response = HttpResponse()
     response['HX-Redirect'] = reverse('items')
@@ -104,7 +107,7 @@ def type_profile(request, tid):
     form = SaveTypeForm(request.POST or None, instance=type)
 
     if form.is_valid():
-        create_audit(request, "UPDATE", 'type_profile ' + form.cleaned_data['name'])
+        create_audit(request, AuditLog.AuditTypes.UPDATE, 'Updated type')
         form.save()
         return render(request, 'partials/form_success.html', {'msg': _('Updated')})
     return render(request, 'partials/form_error.html', {'form': form})
@@ -117,7 +120,7 @@ def new_type(request):
     form = SaveTypeForm(request.POST or None)
 
     if form.is_valid():
-        create_audit(request, "UPDATE", 'type_profile ' + form.cleaned_data['name'])
+        create_audit(request, AuditLog.AuditTypes.CREATE, 'Created type')
         form.save()
         response = HttpResponse()
         response['HX-Redirect'] = reverse('items')
@@ -140,7 +143,7 @@ def delete_type(request):
     if petitions is not None:
         return render(request, 'partials/form_error.html', {'error': _('type being used')})
 
-    create_audit(request, "UPDATE", 'type_profile ' + type.name)
+    create_audit(request, AuditLog.AuditTypes.DELETE, 'Deleted Type')
     type.delete()
     response = HttpResponse()
     response['HX-Redirect'] = reverse('items')
@@ -148,29 +151,20 @@ def delete_type(request):
 
 @login_required(login_url='login')
 def petitions(request):
-    only_active = request.GET.get('active_filter') == 'on'
-    only_pending = not request.GET.get('pending_filter') == 'on'
-    expired = request.GET.get('expired_filter') == 'on'
     user_id = request.GET.get('user_id')
+    status = request.GET.get('status')
+    today = timezone.now()
 
     if not user_id:
-        if not expired:
-            return table_helper(request, Petition,
+        return table_helper_status(request, Petition,
                        ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
-                       '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions',
-                       add_filters={'is_active': only_active, 'is_pending': only_pending})
-        today = timezone.now()
-        return table_helper(request, Petition,
-                            ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username',
-                             'item__code'],
-                            '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions',
-                            add_filters={'is_active': only_active, 'is_pending': only_pending, 'until__lt': today})
+                       '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions', add_filters={'status': status})
 
     user = User.objects.get(id=user_id)
-    return table_helper(request, Petition,
+    return table_helper_status(request, Petition,
                      ['type__name', 'user__username', 'user__dni', 'user__email', 'user__username', 'item__code'],
                     '-id', 10, 'petitions.html', 'partials/tables/petitions.html', 'petitions',
-                            add_filters={'is_active': only_active, 'is_pending': only_pending}, user=user)
+                               user=user)
 
 
 @login_required(login_url='login')
@@ -180,7 +174,7 @@ def reserve(request, tid):
 
     user = request.user
 
-    previous_requests = Petition.objects.filter(user=user).filter(is_pending=True).count() + Petition.objects.filter(user=user).filter(is_active=True).count()
+    previous_requests = Petition.objects.filter(user=user).filter(Q(status=Petition.PetitionStatus.PENDING) | Q(status=Petition.PetitionStatus.ACTIVE)).count()
 
     if previous_requests >= user.max_petitions:
         return render(request, 'partials/store_error.html', {'error': _('errors.many_petitions')})
@@ -205,87 +199,54 @@ def reserve(request, tid):
 @login_required
 def petition(request, pid):
     petition = Petition.objects.get(id=pid)
-
-    if request.user != petition.user and not request.user.is_staff:
-        return redirect('index')
+    today = timezone.now()
 
     if request.method != 'POST':
-        if petition is None:
-            return Http404
-
-        if (petition.user != request.user) and (not request.user.is_staff):
-            return Http404
-
-        items = list(Item.objects.filter(type=petition.type).filter(is_available=True).filter(is_blocked=False))
-
-        if petition.is_active:
-            items.append(petition.item)
-
-        today = timezone.now()
-
-        return render(request, 'petition_profile.html', {'petition': petition, 'items': items, 'today': today})
+       if petition is None or ((petition.user != request.user) and (not request.user.is_staff)):
+           create_audit(request, AuditLog.AuditTypes.FAIL, 'Tried to access non-own petition')
+           return Http404
+       items_list = list(Item.objects.filter(type=petition.type).filter(status=Item.ItemStatus.AVAILABLE)) + ([petition.item] if petition.status == petition.PetitionStatus.ACTIVE else [])
+       return render(request, 'petition_profile.html',
+                     {'petition': petition, 'items': items_list, 'today': today, 'status': Petition.PetitionStatus})
 
     if not request.user.is_staff:
-        return HttpResponse(status=403)
+        create_audit(request, AuditLog.AuditTypes.FAIL, 'Tried to update petition')
+        return HttpResponseForbidden()
+
+    if request.POST.get('accept') == 'false':
+        petition.status = Petition.PetitionStatus.DECLINED
+        petition.save()
+        return gu.handle_redirect(petition)
 
     form = SavePetitionForm(request.POST or None, instance=petition)
-    if petition.is_pending:
-        # DECLINE
-        if request.POST.get('accept') == 'false':
-            petition.is_pending = False
-            petition.is_active = False
-            petition.save()
-            utils.send_message(petition.user, _('Petition of %(type)s declined') % {'type': petition.type})
-            response = HttpResponse()
-            response['HX-Redirect'] = reverse('petition', args=[pid])
-            return response
-
-        # ACCEPT
-        if form.is_valid():
-            if not form.cleaned_data['item']:
-                return render(request, 'partials/form_error.html', {'error': _('specify id')})
-            item = form.cleaned_data['item']
-            create_audit(request, "UPDATE", 'petition ' + petition.user.username)
-            petition.is_active = True
-            petition.is_pending = False
+    if form.is_valid():
+        print('Valida')
+        if petition.PetitionStatus.PENDING:
+            print('Penditente')
+            petition.status = Petition.PetitionStatus.ACTIVE
             petition.date_reserved = timezone.now()
-            petition.save()
-            item.is_available = False
-            item.save()
-            utils.send_message(petition.user, _('Petition of %(type)s accepted') % {'type': petition.type})
-            response = HttpResponse()
-            response['HX-Redirect'] = reverse('petition', args=[pid])
-            return response
+            petition.item.status = Item.ItemStatus.IN_USE
+            petition.item.save()
 
-    if petition.is_active and form.is_valid():
-        # COLLECT
-        if request.POST.get('collect') == 'true':
-            create_audit(request, "REMOVE", 'petition ' + petition.user.username)
-            petition.is_active = False
-            petition.item.is_available = True
+        if petition.PetitionStatus.ACTIVE and request.POST.get('collect') == 'true':
+            print('Collect')
+            petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
-            petition.item = None
-            petition.save()
-            utils.send_message(petition.user, _('Petition of %(type)s collected') % {'type': petition.type})
-            response = HttpResponse()
-            response['HX-Redirect'] = reverse('petition', args=[pid])
-            return response
-        # EDIT
-        if not form.cleaned_data['item']:
-            return render(request, 'partials/form_error.html', {'error': _('specify id')})
-        item = form.cleaned_data['item']
-        if item != petition.item:
-            item.is_available = False
-            petition.item.is_available = True
-            item.save()
+            petition.status = Petition.PetitionStatus.COLLECTED
+
+        neoitem = form.cleaned_data['item']
+        if neoitem != petition.item:
+            print('Item cambiado')
+            petition.item.status = Item.ItemStatus.AVAILABLE
             petition.item.save()
-        create_audit(request, "UPDATE", 'petition ' + petition.user.username)
-        utils.send_message(petition.user, _('Petition of %(type)s edited') % {'type': petition.type})
+            neoitem.status = Item.ItemStatus.IN_USE
+            petition.item = neoitem
+            neoitem.save()
+
         petition.save()
-        response = HttpResponse()
-        response['HX-Redirect'] = reverse('petition', args=[pid])
-        return response
-    # BAD
+        print('Handle redirect')
+        return gu.handle_redirect(petition)
+
     return render(request, 'partials/form_error.html', {'form': form})
 
 @user_passes_test(User.staff_check, login_url='login')
