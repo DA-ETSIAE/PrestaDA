@@ -210,7 +210,7 @@ msgstr "Usuarios"
 
 #: templates/__base.html:169
 msgid "menu.print"
-msgstr "Impimir"
+msgstr "Imprimir"
 
 #: templates/__base.html:171
 msgid "menu.validate"
@@ -335,7 +335,7 @@ msgstr "Detalles"
 
 #: templates/index.html:96
 msgid "index.petition_print_receipt"
-msgstr "Imrpimir"
+msgstr "Imprimir"
 
 #: templates/item_create.html:4
 msgid "titles.item_create"
@@ -566,7 +566,7 @@ msgstr "Devuelto"
 
 #: templates/petition_profile.html:71
 msgid "petition.print"
-msgstr "Imprimir"
+msgstr "Imprimit"
 
 #: templates/petitions.html:4
 msgid "titles.petitions"

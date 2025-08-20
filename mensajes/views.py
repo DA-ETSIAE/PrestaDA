@@ -82,3 +82,10 @@ def send_user(request, uid):
 
 
 
+@user_passes_test(User.superuser_check, login_url='login')
+def test_email(request):
+    if request.method != 'POST':
+        return HttpResponse(status=404)
+
+    request.user.message('Test Message', True, 'Test Email Subject')
+    return render(request, 'partials/form_success.html')

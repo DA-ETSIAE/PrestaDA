@@ -10,6 +10,9 @@
               <div class="box" style="min-height: 400px;">
 
  <div id="message"></div>
+
+     <form hx-post="{% url 'test_email' %}" hx-target="#message"><a class="button is-link">{% trans 'test_email' %}</a></form>
+
      <table class="table is-striped is-hoverable is-fullwidth">
         <thead>
             <tr>
