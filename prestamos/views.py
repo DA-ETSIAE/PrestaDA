@@ -23,7 +23,7 @@ def index(request):
     for user_petition in user_petitions:
         if user_petition.status == Petition.PetitionStatus.ACTIVE:
             delta = (user_petition.until - today).days
-            total = (user_petition.until - user_petition.date_reserved).days
+            total = max((user_petition.until - user_petition.date_reserved).days, 1)
             percent = min(int((1 - delta/total)*100), 100)
             user_petition.percent = percent
             user_petition.color = match_color(percent)
