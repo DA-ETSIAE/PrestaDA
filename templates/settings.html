@@ -11,7 +11,7 @@
 
  <div id="message"></div>
 
-     <form hx-post="{% url 'test_email' %}" hx-target="#message"><a class="button is-link">{% trans 'test_email' %}</a></form>
+     <form hx-post="{% url 'test_email' %}" hx-target="#message">{% csrf_token %}<a class="button is-link">{% trans 'test_email' %}</a></form>
 
      <table class="table is-striped is-hoverable is-fullwidth">
         <thead>
