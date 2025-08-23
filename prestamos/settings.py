@@ -214,10 +214,10 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'rpc://')
 CELERY_BEAT_SCHEDULE = {
     "check_expired_petitions": {
         "task": "gestor.tasks.check_expired_petitions",
-        "schedule": crontab(hour=12, minute=0),
+        "schedule": crontab(minute=0, hour=5), # everyday, 5 am
     },
     "check_waiting_users": {
         "task": "usuarios.tasks.check_waiting_users",
-        "schedule": crontab(hour=0, minute=0, day_of_week=1),
+        "schedule": crontab(hour=15, minute=15, day_of_month=15), # 15th of each month, at 15:15
     },
 }

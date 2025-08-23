@@ -9,5 +9,4 @@ def check_waiting_users():
     from usuarios.models import User
     count = User.objects.filter(Q(dni__isnull=True) | Q(phone__isnull=True)).delete()
 
-    if count:
-        logger.info(f'Deleted {count} users')
+    logger.info(f'Deleted {count} users')

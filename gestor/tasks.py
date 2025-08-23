@@ -15,5 +15,4 @@ def check_expired_petitions():
         msg = _('Your loan of %(type)s has expired') % {'type': p.type.name}
         p.user.message(msg, False, header)
 
-    if count:
-        logger.info(f'Updated {count} Petitions')
+    logger.info(f'Updated {count} Petitions')
