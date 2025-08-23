@@ -14,14 +14,14 @@ from utils.colors import match_color
 
 @login_required(login_url='login')
 def index(request):
-    user_petitions = Petition.objects.filter(user=request.user).filter(Q(status=Petition.PetitionStatus.PENDING) | Q(status=Petition.PetitionStatus.ACTIVE))
+    user_petitions = Petition.objects.filter(user=request.user).filter(Q(status=Petition.Status.PENDING) | Q(status=Petition.Status.ACTIVE))
     user_messages = UserMessage.objects.filter(user=request.user).filter(is_read=False).order_by('-date_created')[:10]
     global_messages = GlobalMessage.objects.filter(is_active=True)
 
     today = timezone.now()
 
     for user_petition in user_petitions:
-        if user_petition.status == Petition.PetitionStatus.ACTIVE:
+        if user_petition.status == Petition.Status.ACTIVE:
             delta = (user_petition.until - today).days
             total = max((user_petition.until - user_petition.date_reserved).days, 1)
             percent = min(int((1 - delta/total)*100), 100)
@@ -30,7 +30,7 @@ def index(request):
 
     return render(request, 'index.html', {'user_petitions': user_petitions,
                                           'user_messages': user_messages, 'global_messages': global_messages,
-                                          'message_count': len(user_messages), 'status': Petition.PetitionStatus})
+                                          'message_count': len(user_messages), 'status': Petition.Status})
 
 @login_required(login_url='login')
 def store(request):
@@ -43,7 +43,7 @@ def store(request):
     if request.headers.get("HX-Request") == "true":
         return render(request, 'partials/results.html', {'gestor_types': types})
 
-    return render(request, 'store.html', {'gestor_types': types})
+    return render(request, 'store.html', {'gestor_types': types, 'type_status': GestorType.Status})
 
 
 

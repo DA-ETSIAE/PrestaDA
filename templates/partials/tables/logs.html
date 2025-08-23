@@ -1,9 +1,11 @@
 {% load i18n %}
+{% load type_colors %}
+{% load type_icons %}
 
             {% for log in logs %}
                 <tr>
                 <td>{{ log.user.email }}</td>
-                <td>{{ log.audit_type }}</td>
+                <td><div class="tags has-addons"> <span class="tag is-medium  {{ log.audit_type|audit_color }} "><i class="{{ log.audit_type|audit_icon}}"></i> </span><span class="tag is-medium ">{{ log.get_audit_type_display }}</span></div>  </td>
                 <td>{{ log.description }}</td>
                 <td>{{ log.ip_address }} - {{ log.user_agent }}</td>
                 <td>{{ log.created_at|date:"H:i - d/m/Y"}}</td>

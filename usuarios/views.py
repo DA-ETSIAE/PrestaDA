@@ -45,7 +45,7 @@ def users(request):
 @login_required(login_url='login')
 def profile_id(request, pid):
     user = User.objects.get(id=pid)
-    statii = Petition.PetitionStatus.choices
+    statii = Petition.Status.choices
     if user is None or (user.id != request.user.id and not request.user.is_staff):
         return Http404
     return render(request, 'profile.html', {'user': user, 'statii': statii})

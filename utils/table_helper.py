@@ -41,9 +41,9 @@ def table_helper(request, model, fields: List[str], order_by,  per_page, full, p
 
     return render(request, full, {context: page_obj})
 
-def table_helper_status(request, model, fields: List[str], order_by,  per_page, full, partial, context, add_filters: Optional[Dict[str, Any]] = None, user: Optional[User] = None):
+def table_helper_status(request, model, fields: List[str], order_by,  per_page, full, partial, context, statii: Optional[Any] = None, add_filters: Optional[Dict[str, Any]] = None, user: Optional[User] = None):
     models = find(request, model, fields).order_by(order_by)
-    statii = Petition.PetitionStatus.choices
+    statii = statii if statii is not None else []
 
     if user:
         models = models.filter(user=user)

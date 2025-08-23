@@ -8,10 +8,10 @@ logger = get_task_logger(__name__)
 @shared_task
 def check_expired_petitions():
     from gestor.models import Petition
-    count = Petition.objects.filter(status=Petition.PetitionStatus.ACTIVE, until__lt=timezone.now()).update(status=Petition.PetitionStatus.EXPIRED)
+    count = Petition.objects.filter(status=Petition.Status.ACTIVE, until__lt=timezone.now()).update(status=Petition.Status.EXPIRED)
 
     header = _('Loan Expired')
-    for p in Petition.objects.filter(status=Petition.PetitionStatus.EXPIRED):
+    for p in Petition.objects.filter(status=Petition.Status.EXPIRED):
         msg = _('Your loan of %(type)s has expired') % {'type': p.type.name}
         p.user.message(msg, False, header)
 

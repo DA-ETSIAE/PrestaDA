@@ -68,7 +68,7 @@ def generate_invoice(response, petition: Petition):
             text_obj.textLine(line)
         c.drawText(text_obj)
 
-    if status == Petition.PetitionStatus.ACTIVE:
+    if status == Petition.Status.ACTIVE:
         c.setFont("Helvetica", 12)
         c.drawString(1.2*cm, 5*cm, "Firmado por " + name + " con DNI " + dni + ":")
 
@@ -99,7 +99,7 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
         petitions = Petition.objects.filter(until__date__range=(start_date, end_date))
 
 
-    petitions.filter(Q(status=Petition.PetitionStatus.ACTIVE) | Q(status=Petition.PetitionStatus.EXPIRED) | Q(status=Petition.PetitionStatus.COLLECTED) )
+    petitions.filter(Q(status=Petition.Status.ACTIVE) | Q(status=Petition.Status.EXPIRED) | Q(status=Petition.Status.COLLECTED))
     c = canvas.Canvas(response, pagesize=landscape(A4))
     width, height = landscape(A4)
 

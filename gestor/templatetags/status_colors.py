@@ -1,22 +1,28 @@
 from django import template
 
-from gestor.models import Petition, Item
+from gestor.models import Petition, Item, Type
 
 register = template.Library()
 
 PETITIONSTATUS_COLORS = {
-    Petition.PetitionStatus.DECLINED: 'is-danger',
-    Petition.PetitionStatus.PENDING: 'is-warning',
-    Petition.PetitionStatus.ACTIVE: 'is-success',
-    Petition.PetitionStatus.EXPIRED: 'is-link',
-    Petition.PetitionStatus.COLLECTED: 'is-text'
+    Petition.Status.DECLINED: 'is-danger',
+    Petition.Status.PENDING: 'is-warning',
+    Petition.Status.ACTIVE: 'is-success',
+    Petition.Status.EXPIRED: 'is-link',
+    Petition.Status.COLLECTED: 'is-text'
 }
 
 
 ITEMSTATUS_COLORS = {
-    Item.ItemStatus.AVAILABLE: 'is-primary',
-    Item.ItemStatus.IN_USE: 'is-text',
-    Item.ItemStatus.BLOCKED: 'is-danger'
+    Item.Status.AVAILABLE: 'is-primary',
+    Item.Status.IN_USE: 'is-text',
+    Item.Status.BLOCKED: 'is-danger'
+}
+
+TYPESTATUS_COLORS = {
+    Type.Status.AVAILABLE: 'is-primary',
+    Type.Status.BLOCKED: 'is-danger'
+
 }
 
 @register.filter
@@ -26,3 +32,7 @@ def petitionstatus_color(value):
 @register.filter
 def itemstatus_color(value):
     return ITEMSTATUS_COLORS.get(value, 'is-text')
+
+@register.filter
+def typestatus_color(value):
+    return TYPESTATUS_COLORS.get(value, 'is-text')

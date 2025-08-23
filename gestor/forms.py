@@ -19,7 +19,7 @@ class ValidateForm(forms.Form):
 class SaveTypeForm(ModelForm):
     class Meta:
         model = Type
-        fields = ['name', 'conditions', 'description', 'is_blocked']
+        fields = ['name', 'conditions', 'description', 'status']
 
 class SaveItemForm(ModelForm):
     class Meta:

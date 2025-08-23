@@ -8,38 +8,54 @@
 
 <div class="column">
 <div id="message"></div>
-              <div class="box" style="min-height: 400px;">
-                  <div class="field has-addons is-justify-content-center">
-        <div class="control has-icons-left" style="width: 100%;">
-            <input class="input is-link is-medium has-text-centered"
-                   type="text"
-                   name="s"
-                   placeholder="{% trans 'items.search' %}"
-                   hx-get="{% url 'items' %}"
-                   hx-trigger="keyup changed delay:300ms"
-                   hx-target="#table"
-                   data-theme="light">
-            <span class="icon is-small is-left">
-                <i class="iconoir-search"></i>
-            </span>
-        </div>
+<div class="box" style="min-height: 400px;">
+  <div class="field has-addons is-justify-content-center">
+    <div class="control has-icons-left" style="width: 100%;">
+      <input
+        class="input is-link is-medium has-text-centered"
+        type="text"
+        name="s"
+        placeholder="{% trans 'search' %}"
+        hx-get="{% url 'items' %}"
+        hx-trigger="keyup changed delay:300ms"
+        hx-target="#table"
+        hx-include="[name='status']" />
+      <span class="icon is-small is-left">
+        <i class="iconoir-search"></i>
+      </span>
     </div>
-                  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
-        <thead>
-            <tr>
-                <th>{% trans 'item.type' %}</th>
-                <th>{% trans 'item.code' %}</th>
-                <th>{% trans 'item.status' %}</th>
-                <th>{% trans 'item.actions' %}</th>
+  </div>
 
-            </tr>
-        </thead>
+  <div class="field is-justify-content-center mt-2">
+    <div class="select is-medium is-fullwidth">
+      <select
+        name="status"
+        hx-trigger="change"
+        hx-get="{% url 'items' %}"
+        hx-target="#table"
+        hx-include="[name='s']">
+        <option value="">{% trans 'petitions.filter_none' %}</option>
+        {% for value, label in statii %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
 
-        <tbody id="table">
-                  {% include 'partials/tables/items.html' %}
-        </tbody>
-                  </table>
+  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
+    <thead>
+      <tr>
+        <th>{% trans 'item.type' %}</th>
+        <th>{% trans 'item.code' %}</th>
+        <th>{% trans 'item.status' %}</th>
+        <th>{% trans 'item.actions' %}</th>
+      </tr>
+    </thead>
 
-              </div>
+    <tbody id="table">
+      {% include 'partials/tables/items.html' %}
+    </tbody>
+  </table>
 </div>
+
 {% endblock %}

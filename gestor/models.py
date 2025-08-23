@@ -5,31 +5,34 @@ from usuarios.models import User
 
 
 class Type(models.Model):
+    class Status(models.TextChoices):
+        BLOCKED = 'BLOCKED', _('Blocked')
+        AVAILABLE = 'AVAILABLE', _('Available')
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     conditions = models.TextField(blank=True, null=True)
-    is_blocked = models.BooleanField(default=False)
+    status = models.CharField(max_length=40, choices=Status.choices, default=Status.AVAILABLE)
 
     def __str__(self):
         return self.name
 
 
 class Item(models.Model):
-    class ItemStatus(models.TextChoices):
+    class Status(models.TextChoices):
         AVAILABLE = "available", _('Available')
         BLOCKED = "blocked", _('Blocked')
         IN_USE = "in_use", _('In Use')
 
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
     type = models.ForeignKey(Type, on_delete=models.PROTECT)
     notes = models.CharField(max_length=200, blank=True, null=True)
-    status = models.CharField(max_length=40, choices=ItemStatus.choices, default=ItemStatus.AVAILABLE)
+    status = models.CharField(max_length=40, choices=Status.choices, default=Status.AVAILABLE)
 
     def __str__(self):
         return self.code
 
 class Petition(models.Model):
-    class PetitionStatus(models.TextChoices):
+    class Status(models.TextChoices):
         DECLINED = 'DECLINED', _('Declined')
         PENDING = 'PENDING', _('Pending')
         ACTIVE = 'ACTIVE', _('Active')
@@ -42,7 +45,7 @@ class Petition(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     date_reserved = models.DateTimeField(null=True, blank=True)
     until = models.DateTimeField(null=True, blank=False)
-    status = models.CharField(max_length=40, choices=PetitionStatus.choices, default=PetitionStatus.PENDING)
+    status = models.CharField(max_length=40, choices=Status.choices, default=Status.PENDING)
 
     def __str__(self):
         return str(self.id)

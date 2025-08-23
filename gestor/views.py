@@ -25,7 +25,14 @@ from . import utils as gu
 
 @user_passes_test(User.staff_check, login_url='login')
 def items(request):
-    return table_helper(request, Item, ['code', 'type__name' ], 'id', 20, 'items.html', 'partials/tables/items.html', 'items')
+    status = request.GET.get('status') or None
+    columns = ['code', 'type__name']
+    kwargs = {}
+    if status is not None:
+        kwargs['add_filters'] = {'status': status}
+
+    return table_helper_status(request, Item, columns, '-id', 40, 'items.html',
+                               'partials/tables/items.html', 'items', statii=Type.Status.choices, **kwargs)
 
 @user_passes_test(User.staff_check, login_url='login')
 def item_profile(request, iid):
@@ -36,7 +43,7 @@ def item_profile(request, iid):
 
     if request.method != 'POST':
         types = Type.objects.all()
-        statii = Item.ItemStatus.choices
+        statii = Item.Status.choices
         return render(request, 'item_profile.html', {'item': item, 'types': types, 'statii': statii})
 
     form = SaveItemForm(request.POST or None, instance=item)
@@ -52,7 +59,7 @@ def item_profile(request, iid):
 def new_item(request):
     if request.method != 'POST':
         types = Type.objects.all()
-        statii = Item.ItemStatus.choices
+        statii = Item.Status.choices
         return render(request, 'item_create.html', {'types': types, 'statii': statii})
 
     form = SaveItemForm(request.POST)
@@ -76,7 +83,7 @@ def delete_item(request):
     if not item:
         return render(request, 'partials/form_error.html', {'error': _('Item invalid')})
 
-    if item.status == Item.ItemStatus.IN_USE:
+    if item.status == Item.Status.IN_USE:
         return render(request, 'partials/form_error.html', {'error': _('Item assigned')})
 
     create_audit(request, AuditLog.AuditTypes.DELETE, 'Deleted item')
@@ -89,7 +96,14 @@ def delete_item(request):
 
 @login_required(login_url='login')
 def types(request):
-    return table_helper(request, Type, ['name', 'description'], 'id', 5, 'types.html', 'partials/tables/types.html','types')
+    status = request.GET.get('status') or None
+    columns = ['name', 'description']
+    kwargs = {}
+    if status is not None:
+        kwargs['add_filters'] = {'status': status}
+
+    return table_helper_status(request, Type, columns, '-id', 40, 'types.html',
+                               'partials/tables/types.html', 'types', statii=Type.Status.choices, **kwargs)
 
 @user_passes_test(User.staff_check, login_url='login')
 def type_profile(request, tid):
@@ -102,7 +116,8 @@ def type_profile(request, tid):
         return Http404
 
     if request.method != 'POST':
-        return render(request, 'type_profile.html', {'type': type})
+        statii = Type.Status.choices
+        return render(request, 'type_profile.html', {'type': type, 'statii': statii})
 
     form = SaveTypeForm(request.POST or None, instance=type)
 
@@ -115,7 +130,8 @@ def type_profile(request, tid):
 @user_passes_test(User.staff_check, login_url='login')
 def new_type(request):
     if request.method != 'POST':
-        return render(request, 'type_create.html')
+        statii = Type.Status.choices
+        return render(request, 'type_create.html', {'statii': statii})
 
     form = SaveTypeForm(request.POST or None)
 
@@ -123,7 +139,7 @@ def new_type(request):
         create_audit(request, AuditLog.AuditTypes.CREATE, 'Created type')
         form.save()
         response = HttpResponse()
-        response['HX-Redirect'] = reverse('items')
+        response['HX-Redirect'] = reverse('types')
         return response
 
     return render(request, 'partials/form_error.html', {'form': form})
@@ -163,7 +179,7 @@ def petitions(request):
         kwargs['add_filters'] = {'status': status}
 
     return table_helper_status(request, Petition, columns,'-id',20,'petitions.html',
-                               'partials/tables/petitions.html', 'petitions', **kwargs)
+                               'partials/tables/petitions.html', 'petitions', statii=Petition.Status.choices, **kwargs)
 
 
 @login_required(login_url='login')
@@ -173,7 +189,7 @@ def reserve(request, tid):
 
     user = request.user
 
-    previous_requests = Petition.objects.filter(user=user).filter(Q(status=Petition.PetitionStatus.PENDING) | Q(status=Petition.PetitionStatus.ACTIVE)).count()
+    previous_requests = Petition.objects.filter(user=user).filter(Q(status=Petition.Status.PENDING) | Q(status=Petition.Status.ACTIVE)).count()
 
     if previous_requests >= user.max_petitions:
         return render(request, 'partials/store_error.html', {'error': _('errors.many_petitions')})
@@ -183,16 +199,16 @@ def reserve(request, tid):
     if type is None:
         return render(request, 'partials/store_error.html', {'error': _('errors.invalid_type')})
 
-    if type.is_blocked is True:
+    if type.status == Type.Status.BLOCKED:
         return render(request, 'partials/store_error.html', {'error': _('errors.blocked_type')})
 
 
     petition = Petition.objects.create(type=type, user=user)
     petition.save()
 
-    if (Item.objects.filter(type=type, status=Item.ItemStatus.AVAILABLE).count()
-            <= Petition.objects.filter(type=type, status=Petition.PetitionStatus.PENDING).count()):
-        type.is_blocked = True
+    if (Item.objects.filter(type=type, status=Item.Status.AVAILABLE).count()
+            <= Petition.objects.filter(type=type, status=Petition.Status.PENDING).count()):
+        type.status = Type.Status.BLOCKED
         type.save()
 
     cnt = _('Petition of %(type)s created') % {'type': type}
@@ -210,49 +226,49 @@ def petition(request, pid):
        if petition is None or ((petition.user != request.user) and (not request.user.is_staff)):
            create_audit(request, AuditLog.AuditTypes.FAIL, 'Tried to access non-own petition')
            return Http404
-       items_list = list(Item.objects.filter(type=petition.type).filter(status=Item.ItemStatus.AVAILABLE)) + ([petition.item] if petition.status == petition.PetitionStatus.ACTIVE else [])
+       items_list = list(Item.objects.filter(type=petition.type).filter(status=Item.Status.AVAILABLE)) + ([petition.item] if petition.status == petition.Status.ACTIVE else [])
        return render(request, 'petition_profile.html',
-                     {'petition': petition, 'items': items_list, 'today': today, 'status': Petition.PetitionStatus})
+                     {'petition': petition, 'items': items_list, 'today': today, 'status': Petition.Status})
 
     if not request.user.is_staff:
         create_audit(request, AuditLog.AuditTypes.FAIL, 'Tried to update petition')
         return HttpResponseForbidden()
 
     if request.POST.get('accept') == 'false':
-        petition.status = Petition.PetitionStatus.DECLINED
+        petition.status = Petition.Status.DECLINED
         petition.save()
-        if (Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count()
-                > Petition.objects.filter(type=petition.type, status=Petition.PetitionStatus.PENDING).count()):
-            petition.type.is_blocked = False
+        if (Item.objects.filter(type=petition.type, status=Item.Status.AVAILABLE).count()
+                > Petition.objects.filter(type=petition.type, status=Petition.Status.PENDING).count()):
+            petition.type.status = Type.Status.AVAILABLE
             petition.type.save()
         return gu.handle_redirect(petition)
 
     form = SavePetitionForm(request.POST or None, instance=petition)
     if form.is_valid():
-        if petition.PetitionStatus.PENDING:
-            petition.status = Petition.PetitionStatus.ACTIVE
+        if petition.Status.PENDING:
+            petition.status = Petition.Status.ACTIVE
             petition.date_reserved = timezone.now()
-            petition.item.status = Item.ItemStatus.IN_USE
+            petition.item.status = Item.Status.IN_USE
             petition.item.save()
             cnt = _('Petition of %(type)s ACCEPTED') % {'type': petition.type}
             petition.user.message(cnt)
 
-        if petition.PetitionStatus.ACTIVE and request.POST.get('collect') == 'true':
-            petition.item.status = Item.ItemStatus.AVAILABLE
+        if petition.Status.ACTIVE and request.POST.get('collect') == 'true':
+            petition.item.status = Item.Status.AVAILABLE
             petition.item.save()
-            petition.status = Petition.PetitionStatus.COLLECTED
-            if (Item.objects.filter(type=petition.type, status=Item.ItemStatus.AVAILABLE).count()
-                    > Petition.objects.filter(type=petition.type, status=Petition.PetitionStatus.PENDING).count()):
-                petition.type.is_blocked = False
+            petition.status = Petition.Status.COLLECTED
+            if (Item.objects.filter(type=petition.type, status=Item.Status.AVAILABLE).count()
+                    > Petition.objects.filter(type=petition.type, status=Petition.Status.PENDING).count()):
+                petition.type.status = Type.Status.AVAILABLE
                 petition.type.save()
             cnt = _('Petition of %(type)s COLLECTED') % {'type': petition.type}
             petition.user.message(cnt)
 
         neoitem = form.cleaned_data['item']
         if neoitem != petition.item:
-            petition.item.status = Item.ItemStatus.AVAILABLE
+            petition.item.status = Item.Status.AVAILABLE
             petition.item.save()
-            neoitem.status = Item.ItemStatus.IN_USE
+            neoitem.status = Item.Status.IN_USE
             petition.item = neoitem
             neoitem.save()
 
@@ -298,3 +314,4 @@ def print_list(request):
     type = Type.objects.get(id=type) if type else None
     pdfs.generate_registry(response, start_date, end_date, type)
     return response
+
