@@ -52,7 +52,7 @@ msgstr "Devuelto"
 
 #: gestor/tasks.py:13
 msgid "Loan Expired"
-msgstr "Préstamos Expirado"
+msgstr "Préstamo Expirado"
 
 #: gestor/tasks.py:15
 #, python-format
@@ -343,7 +343,7 @@ msgstr "Crear Ítem"
 
 #: templates/item_create.html:13
 msgid "new_item"
-msgstr "Crear Íteam"
+msgstr "Crear Ítem"
 
 #: templates/item_create.html:21 templates/item_create.html:25
 #: templates/item_profile.html:21 templates/items.html:31
@@ -399,7 +399,7 @@ msgstr "Acciones"
 
 #: templates/login.html:5
 msgid "login"
-msgstr "Inciar Sesión"
+msgstr "Iniciar Sesión"
 
 #: templates/login.html:10
 msgid "login.localdev.button"
@@ -518,7 +518,7 @@ msgstr "Vetado"
 
 #: templates/partials/tables/users.html:44
 msgid "not_banned"
-msgstr "ta bien"
+msgstr "Ta bien"
 
 #: templates/partials/tables/users.html:52
 msgid "admin"
