@@ -6,6 +6,8 @@ on:
 
 jobs:
     build:
+      permissions:
+        contents: read
       name: push to dockerhub
       runs-on: ubuntu-24.04
       steps:

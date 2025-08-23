@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
+from audit.models import AuditLog
 from audit.utils import create_audit
 from configuracion.models import Configuration
 from mensajes import forms, utils
@@ -33,7 +34,8 @@ def read(request, mid):
 @user_passes_test(User.superuser_check, login_url='login')
 def send_global(request):
     if request.method != 'POST':
-        return render(request, 'message_global.html')
+        colors = GlobalMessage.Colors.choices
+        return render(request, 'message_global.html', {'colors': colors})
 
     form = forms.GlobalForm(request.POST or None)
 
@@ -42,7 +44,7 @@ def send_global(request):
         if message.title is None:
             message.has_title = False
         message.save()
-        create_audit(request, "CREATE", 'send_global ' + str(message.id))
+        create_audit(request, AuditLog.AuditTypes.CREATE, 'Sent global message')
         return render(request, 'partials/form_success.html')
 
     return render(request, 'partials/form_error.html', {'form': form})
@@ -55,7 +57,7 @@ def delete_global(request):
     msg = GlobalMessage.objects.get(id=request.POST.get('id'))
     msg.is_active = False
     msg.save()
-    create_audit(request, "DELETE", 'delete_global ' + str(msg.id))
+    create_audit(request, AuditLog.AuditTypes.DELETE, 'Deleted global message')
     response = HttpResponse()
     response['HX-Redirect'] = reverse('index')
     return response
@@ -72,11 +74,18 @@ def send_user(request, uid):
     if form.is_valid():
         message = form.cleaned_data['content']
         header = _('Admin Message')
-        utils.send_message(user, message, is_from_staff=True, email_subject=header)
-        create_audit(request, "CREATE", 'send_user ' + message)
+        user.message(message, is_from_staff=True, email_subject=header)
+        create_audit(request, AuditLog.AuditTypes.CREATE, 'Messaged user')
         return render(request, 'partials/form_success.html')
 
     return render(request, 'partials/form_error.html', {'form': form})
 
 
 
+@user_passes_test(User.superuser_check, login_url='login')
+def test_email(request):
+    if request.method != 'POST':
+        return HttpResponse(status=404)
+
+    request.user.message('Test Message', True, 'Test Email Subject')
+    return render(request, 'partials/form_success.html')

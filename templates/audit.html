@@ -13,15 +13,31 @@
             <input class="input is-link is-medium has-text-centered"
                    type="text"
                    name="s"
-                   placeholder="{% trans 'logs.search' %}"
+                   placeholder="{% trans 'search' %}"
                    hx-get="{% url 'logs' %}"
                    hx-trigger="keyup changed delay:300ms"
-                   hx-target="#table">
+                   hx-target="#table"
+                   hx-include="[name='type']">
             <span class="icon is-small is-left">
-                <i class="iconoir-search    "></i>
+                <i class="iconoir-search   "></i>
             </span>
         </div>
     </div>
+    <div class="field is-justify-content-center mt-2">
+    <div class="select is-medium is-fullwidth">
+      <select
+        name="audit_type"
+        hx-trigger="change"
+        hx-get="{% url 'logs' %}"
+        hx-target="#table"
+        hx-include="[name='s']">
+        <option value="">{% trans 'petitions.filter_none' %}</option>
+        {% for value, label in statii %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
                   <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
         <thead>
             <tr>

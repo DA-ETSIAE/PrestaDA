@@ -10,6 +10,9 @@
               <div class="box" style="min-height: 400px;">
 
  <div id="message"></div>
+
+     <form hx-post="{% url 'test_email' %}" hx-target="#message">{% csrf_token %}<input type="submit" class="button is-link" value="{% trans 'test_email' %}"/></form>
+
      <table class="table is-striped is-hoverable is-fullwidth">
         <thead>
             <tr>

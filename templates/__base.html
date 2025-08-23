@@ -123,7 +123,7 @@
                         <div class="buttons">
                             <form action="{% url 'oidc_logout' %}" method="post" style="margin: 0;">
                                 {% csrf_token %}
-                                <input class="button is-primary mx-4" type="submit" value="{% trans 'nav.logout' %}">
+                                <input class="button is-primary is-light mx-4" type="submit" value="{% trans 'nav.logout' %}">
                             </form>
                         </div>
                     </div>
@@ -165,6 +165,8 @@
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.requests' %}</a></li>
                                 {% url 'users' as url %}
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.users' %}</a></li>
+                                {% url 'print' as url %}
+                                <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.print' %}</a></li>
                                 {% url 'validate' as url %}
                                 <li><a href="{{ url }}" class="{% if request.path == url %}is-active{% endif %}">{% trans 'menu.validate' %}</a></li>
                             </ul>

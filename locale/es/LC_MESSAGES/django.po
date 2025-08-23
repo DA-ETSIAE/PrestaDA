@@ -1,14 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Textos Originales (Español)
+# Copyright (C) 2025 Iván Moya Ortiz
+# This file is distributed under the same license as the Prestamos package.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 13:27+0200\n"
+"POT-Creation-Date: 2025-08-19 18:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,142 +18,267 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
-#: gestor/views.py:33 gestor/views.py:49
+#: gestor/models.py:19
+msgid "Available"
+msgstr "Disponible"
+
+#: gestor/models.py:20
+msgid "Blocked"
+msgstr "Bloqueado"
+
+#: gestor/models.py:21
+msgid "In Use"
+msgstr "Prestado"
+
+#: gestor/models.py:33
+msgid "Declined"
+msgstr "Rechazado"
+
+#: gestor/models.py:34
+msgid "Pending"
+msgstr "Pendiente"
+
+#: gestor/models.py:35
+msgid "Active"
+msgstr "Activa"
+
+#: gestor/models.py:36
+msgid "Expired"
+msgstr "Expirado"
+
+#: gestor/models.py:37
+msgid "Collected"
+msgstr "Devuelto"
+
+#: gestor/tasks.py:13
+msgid "Loan Expired"
+msgstr "Préstamos Expirado"
+
+#: gestor/tasks.py:15
+#, python-format
+msgid "Your loan of %(type)s has expired"
+msgstr ""
+"Tu préstamos de un/a %(type)s ha expirado. Pasa por Delegación para "
+"devolverlo/a lo antes posible."
+
+#: gestor/views.py:46 gestor/views.py:112
+msgid "Updated"
+msgstr "Actualizado"
+
+#: gestor/views.py:77
 msgid "Item invalid"
-msgstr "Ítem inválido"
+msgstr "Ítem no válido"
 
-#: gestor/views.py:36 gestor/views.py:52
+#: gestor/views.py:80
 msgid "Item assigned"
-msgstr "Item asignado"
+msgstr "Ítem ya asignado"
 
-#: gestor/views.py:39
-msgid "Item deleted (refresh for changes)"
-msgstr "Item borrado - refresca para ver los cambios"
+#: gestor/views.py:139
+msgid "type invalid"
+msgstr "Tipo no válido"
 
-#: gestor/views.py:60
-msgid "Item updated (refresh for changes)"
-msgstr "Ítem actualizado - refresca para ver los cambios"
+#: gestor/views.py:144
+msgid "type being used"
+msgstr "Ese tipo tiene uso"
 
-#: gestor/views.py:93
+#: gestor/views.py:177
 msgid "errors.invalid_request"
 msgstr "Solicitud Inválida"
 
-#: gestor/views.py:100
+#: gestor/views.py:184
 msgid "errors.many_petitions"
-msgstr "Tienes demasiadas solicitudes"
+msgstr "Tienes demasiados pedidos. Espera."
 
-#: gestor/views.py:105
+#: gestor/views.py:189
 msgid "errors.invalid_type"
-msgstr "Ese tipo de ítem no existe"
+msgstr "Tipo no válido"
 
-#: gestor/views.py:108
+#: gestor/views.py:192
 msgid "errors.blocked_type"
-msgstr "Ese tipo de ítem está bloqueado"
+msgstr "Tipo bloqueado"
 
-#: gestor/views.py:113
+#: gestor/views.py:197
 #, python-format
 msgid "Petition of %(type)s created"
-msgstr "Has solicitado un/a %(type)s"
+msgstr "Has solicitado un/a: %(type)s "
 
-#: gestor/views.py:152
+#: gestor/views.py:232
 #, python-format
-msgid "Petition of %(type)s declined"
-msgstr "Tu solicitud de un/a %(type)s ha sido RECHAZADA"
+msgid "Petition of %(type)s ACCEPTED"
+msgstr "Se te ha concedido un/a %(type)s"
 
-#: gestor/views.py:160 gestor/views.py:188
-msgid "specify id"
-msgstr "Especifica ID"
-
-#: gestor/views.py:169
+#: gestor/views.py:239
 #, python-format
-msgid "Petition of %(type)s accepted"
-msgstr "Tu solicitud de un/a %(type)s ha sido ACEPTADA"
+msgid "Petition of %(type)s COLLECTED"
+msgstr "%(type)s recogido/a"
 
-#: gestor/views.py:182
-#, python-format
-msgid "Petition of %(type)s collected"
-msgstr "Se ha reclamado tu %(type)s"
-
-#: gestor/views.py:196
-#, python-format
-msgid "Petition of %(type)s edited"
-msgstr "Se ha reclamado tu petición de un/a %(type)s"
-
-#: gestor/views.py:219
-#, fuzzy
-#| msgid "errors.unauth"
+#: gestor/views.py:270
 msgid "errors.doesnt_match"
-msgstr "No autorizado"
+msgstr "No coinciden"
+
+#: mensajes/models.py:18
+msgid "Black"
+msgstr "Negro"
+
+#: mensajes/models.py:19
+msgid "Blue"
+msgstr "Azul"
+
+#: mensajes/models.py:20
+msgid "Greenish Blue"
+msgstr "Azul verdoso"
+
+#: mensajes/models.py:21
+msgid "Light Blue"
+msgstr "Azul clarito"
+
+#: mensajes/models.py:22
+msgid "Green"
+msgstr "Verde"
+
+#: mensajes/models.py:23
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: mensajes/models.py:24
+msgid "Red"
+msgstr "Rojo"
+
+#: mensajes/views.py:76
+msgid "Admin Message"
+msgstr "Mensaje de Delegación"
 
 #: templates/403.html:5
-msgid "errors.unauth"
-msgstr "No autorizado"
+msgid "errors.403"
+msgstr "403"
 
-#: templates/404.html:4
-msgid "errors.notfound"
-msgstr "No encontrado"
+#: templates/403.html:6
+msgid "errors.403_desc"
+msgstr "¡No puedes acceder a eso!"
 
-#: templates/500.html:4
-msgid "errors.internal"
-msgstr "Error interno"
+#: templates/404.html:5
+msgid "errors.404"
+msgstr "404"
 
-#: templates/__base.html:125 templates/maintenance.html:45
+#: templates/404.html:6
+msgid "errors.404_desc"
+msgstr "¿Te has perdido?"
+
+#: templates/500.html:5
+msgid "errors.500"
+msgstr "500"
+
+#: templates/500.html:6
+msgid "errors.500_desc"
+msgstr "Error del servidor. Contacta con tic.da.aeroespacial@upm.es"
+
+#: templates/__base.html:126 templates/maintenance.html:10
 msgid "nav.logout"
 msgstr "Salir"
 
-#: templates/__base.html:131 templates/maintenance.html:48
+#: templates/__base.html:132 templates/maintenance.html:13
 msgid "nav.login"
-msgstr "Entrar"
+msgstr "Iniciar Sesión"
 
-#: templates/__base.html:150
+#: templates/__base.html:151
 msgid "menu.general"
 msgstr "Menú"
 
-#: templates/__base.html:153
+#: templates/__base.html:154
 msgid "menu.dashboard"
 msgstr "Escritorio"
 
-#: templates/__base.html:155
+#: templates/__base.html:156
 msgid "menu.store"
 msgstr "Escaparate"
 
-#: templates/__base.html:157
+#: templates/__base.html:158
 msgid "menu.my_profile"
-msgstr "Mi Perfil"
+msgstr "Perfil"
 
-#: templates/__base.html:161
-msgid "menu.staffonly"
-msgstr "Menú Staff"
+#: templates/__base.html:162
+msgid "menu.request_management"
+msgstr "Solicitudes"
 
-#: templates/__base.html:164
+#: templates/__base.html:165
 msgid "menu.requests"
 msgstr "Solicitudes"
 
-#: templates/__base.html:166
-msgid "menu.items"
-msgstr "Ítems"
-
-#: templates/__base.html:168
-msgid "menu.types"
-msgstr "Tipos"
-
-#: templates/__base.html:170
+#: templates/__base.html:167
 msgid "menu.users"
 msgstr "Usuarios"
 
-#: templates/__base.html:172
-#, fuzzy
-#| msgid "menu.items"
+#: templates/__base.html:169
+msgid "menu.print"
+msgstr "Imprimir"
+
+#: templates/__base.html:171
 msgid "menu.validate"
-msgstr "Ítems"
+msgstr "Validar"
+
+#: templates/__base.html:174
+msgid "menu.inventory_management"
+msgstr "Inventario"
 
 #: templates/__base.html:177
-msgid "menu.adminonly"
-msgstr "Menú Admin"
+msgid "menu.items"
+msgstr "Ítems"
 
-#: templates/__base.html:180
+#: templates/__base.html:179
+msgid "menu.new_item"
+msgstr "Nuevo ítem"
+
+#: templates/__base.html:181
+msgid "menu.types"
+msgstr "Tipos"
+
+#: templates/__base.html:183
+msgid "menu.new_type"
+msgstr "Nuevo tipo"
+
+#: templates/__base.html:189
+msgid "menu.site_management"
+msgstr "Gestión"
+
+#: templates/__base.html:192
 msgid "menu.config"
 msgstr "Configuración"
+
+#: templates/__base.html:194
+msgid "menu.message_global"
+msgstr "Mensaje Global"
+
+#: templates/__base.html:196
+msgid "menu.audit"
+msgstr "Audit"
+
+#: templates/audit.html:4 templates/users.html:4
+msgid "titles.user_list"
+msgstr "Usuarios"
+
+#: templates/audit.html:16
+msgid "logs.search"
+msgstr "Buscar"
+
+#: templates/audit.html:28
+msgid "log.user.email"
+msgstr "E-Mail"
+
+#: templates/audit.html:29
+msgid "log.audit_type"
+msgstr "Tipo"
+
+#: templates/audit.html:30
+msgid "log.description"
+msgstr "Descripción"
+
+#: templates/audit.html:31
+msgid "log.user_agent"
+msgstr "User Agent"
+
+#: templates/audit.html:32
+msgid "log.created_at"
+msgstr "Fecha"
 
 #: templates/ban.html:4 templates/profile.html:4
 msgid "titles.profile"
@@ -162,15 +286,15 @@ msgstr "Perfil"
 
 #: templates/ban.html:14
 msgid "ban.target_id"
-msgstr "ID del Objetivo"
+msgstr "Objetivo"
 
 #: templates/ban.html:22
 msgid "ban.reason"
 msgstr "Razón"
 
-#: templates/ban.html:29 templates/validate.html:37
+#: templates/ban.html:29 templates/print.html:43 templates/validate.html:37
 msgid "ban.submit"
-msgstr "Confirmar"
+msgstr "Enviar"
 
 #: templates/banned.html:18
 msgid "banned.banned"
@@ -180,107 +304,151 @@ msgstr "Vetado"
 msgid "banned.appeal"
 msgstr "Apelar"
 
-#: templates/index.html:4 templates/store.html:4
+#: templates/index.html:4
 msgid "titles.index"
-msgstr "Escritorio"
+msgstr "Índice"
+
+#: templates/index.html:19
+msgid "index.remove_message"
+msgstr "Borrar Mensaje"
 
 #: templates/index.html:28
 msgid "index.no_unread"
-msgstr "Estás al día"
+msgstr "Feed limpio"
 
 #: templates/index.html:30
 msgid "index.no_unread_body"
-msgstr "Muy bien, no tienes mensajes sin leer"
+msgstr ""
+"¡No tienes mensajes sin leer! Ni la asignatura que más al día llevas..."
 
 #: templates/index.html:33
-#, fuzzy
-#| msgid "index.no_unread"
 msgid "index.your_feed"
-msgstr "Estás al día"
+msgstr "Tu feed"
 
-#: templates/index.html:70
+#: templates/index.html:71 templates/index.html:78
 msgid "index.petition_pending"
-msgstr "En revisión"
+msgstr "Pendiente"
 
-#: templates/index.html:87
-#, fuzzy
-#| msgid "index.petition_pending"
+#: templates/index.html:95
 msgid "index.petition_details"
-msgstr "En revisión"
+msgstr "Detalles"
 
-#: templates/index.html:88
-#, fuzzy
-#| msgid "index.petition_pending"
+#: templates/index.html:96
 msgid "index.petition_print_receipt"
-msgstr "En revisión"
+msgstr "Imprimir"
 
 #: templates/item_create.html:4
-msgid "titles.item_edit"
-msgstr "Editar"
+msgid "titles.item_create"
+msgstr "Crear Ítem"
+
+#: templates/item_create.html:13
+msgid "new_item"
+msgstr "Crear Íteam"
+
+#: templates/item_create.html:21 templates/item_create.html:25
+#: templates/item_profile.html:21 templates/items.html:31
+msgid "item.code"
+msgstr "Código (nombre)"
+
+#: templates/item_create.html:31 templates/item_create.html:35
+#: templates/item_profile.html:31
+msgid "item.notes"
+msgstr "Notas"
+
+#: templates/item_create.html:41 templates/item_profile.html:41
+#: templates/items.html:30
+msgid "item.type"
+msgstr "Tipo"
+
+#: templates/item_create.html:55 templates/item_profile.html:55
+#: templates/message_global.html:40
+msgid "item.blocked"
+msgstr "Bloqueado"
+
+#: templates/item_create.html:69 templates/item_profile.html:69
+#: templates/message_global.html:55 templates/message_user.html:44
+#: templates/type_create.html:64 templates/type_profile.html:73
+msgid "submit"
+msgstr "Enviar"
+
+#: templates/item_profile.html:4
+#, fuzzy
+#| msgid "titles.item_list"
+msgid "titles.item"
+msgstr "Lista de ítems"
+
+#: templates/item_profile.html:79 templates/type_profile.html:83
+msgid "delete"
+msgstr "Borrar"
 
 #: templates/items.html:4
 msgid "titles.item_list"
 msgstr "Lista de ítems"
 
 #: templates/items.html:17
-#, fuzzy
-#| msgid "users.search"
 msgid "items.search"
 msgstr "Buscar"
 
-#: templates/items.html:29
-#, fuzzy
-#| msgid "titles.type"
-msgid "item.type"
-msgstr "Tipo"
-
-#: templates/items.html:30
-msgid "item.code"
-msgstr ""
-
-#: templates/items.html:31
-#, fuzzy
-#| msgid "shop.blocked"
-msgid "item.blocked"
-msgstr "Bloqueado"
-
 #: templates/items.html:32
-msgid "item.available"
-msgstr ""
+msgid "item.status"
+msgstr "Estado"
 
-#: templates/items.html:33 templates/types.html:30
-#, fuzzy
-#| msgid "petition.actions"
+#: templates/items.html:33 templates/types.html:31
 msgid "item.actions"
 msgstr "Acciones"
 
-#: templates/login.html:16
-msgid "login.header"
-msgstr "Iniciar Sesión"
+#: templates/login.html:5
+msgid "login"
+msgstr "Inciar Sesión"
 
-#: templates/login.html:24
-msgid "login.localdev.warning"
-msgstr ""
-
-#: templates/login.html:27
+#: templates/login.html:10
 msgid "login.localdev.button"
-msgstr ""
+msgstr "Local Dev"
 
-#: templates/login.html:31
+#: templates/login.html:13
 msgid "login.openid"
-msgstr "Iniciar Sesión con SIU-UPM"
+msgstr "Entrar con SIU-UPM"
+
+#: templates/message_global.html:4 templates/message_user.html:4
+msgid "titles.global_message"
+msgstr "Mensaje Global"
+
+#: templates/message_global.html:13
+msgid "send_global"
+msgstr "Enviar Mensaje Global"
+
+#: templates/message_global.html:21 templates/message_global.html:25
+#: templates/message_global.html:31
+msgid "message.title"
+msgstr "Título"
+
+#: templates/message_global.html:35 templates/message_user.html:35
+msgid "messages.content"
+msgstr "Contenido"
+
+#: templates/message_user.html:13
+msgid "send_msg_user"
+msgstr "Enviar Mensaje a Usuario"
+
+#: templates/message_user.html:21 templates/message_user.html:31
+msgid "message.content"
+msgstr "Contenido"
 
 #: templates/partials/form_success.html:7
 msgid "forms.success"
-msgstr "¡Éxito!"
+msgstr "Acción completada con éxito"
 
-#: templates/partials/results.html:20
+#: templates/partials/results.html:10
+msgid "store.staff_view_profile"
+msgstr "Ver perfil"
+
+#: templates/partials/results.html:21
 msgid "shop.get_it"
 msgstr "Solicitar"
 
-#: templates/partials/results.html:23
+#: templates/partials/results.html:24
 msgid "shop.blocked"
-msgstr "Bloqueado"
+msgstr "No solicitable"
 
 #: templates/partials/store_error.html:6
 msgid "store.error"
@@ -288,7 +456,7 @@ msgstr "Error"
 
 #: templates/partials/store_success.html:5
 msgid "store.success"
-msgstr "¡Exito!"
+msgstr "Éxito"
 
 #: templates/partials/store_success.html:9
 #, python-format
@@ -297,105 +465,60 @@ msgstr "Has solicitado un/a %(type)s"
 
 #: templates/partials/table_petitions.html:8
 msgid "petitions.search"
-msgstr "Buscar Petición"
+msgstr "Buscar"
 
 #: templates/partials/table_petitions.html:27
-#, fuzzy
-#| msgid "index.petition_pending"
-msgid "petitions.not_pending_filter"
-msgstr "En revisión"
+msgid "petitions.filter_none"
+msgstr "No filtrar"
 
-#: templates/partials/table_petitions.html:36
-#, fuzzy
-#| msgid "petition.view_profile"
-msgid "petitions.active_filter"
-msgstr "Ver Perfil"
-
-#: templates/partials/table_petitions.html:43
-msgid "petition.user"
-msgstr "Usuario"
-
-#: templates/partials/table_petitions.html:44
+#: templates/partials/table_petitions.html:39
 msgid "petition.type"
 msgstr "Tipo"
 
-#: templates/partials/table_petitions.html:45
-#: templates/petition_profile.html:37
-msgid "petition.date"
-msgstr "Fecha"
-
-#: templates/partials/table_petitions.html:46
+#: templates/partials/table_petitions.html:40
 msgid "petition.status"
 msgstr "Estado"
 
-#: templates/partials/table_petitions.html:47
+#: templates/partials/table_petitions.html:41
+msgid "petition.user"
+msgstr "Usuario"
+
+#: templates/partials/table_petitions.html:42
+#: templates/petition_profile.html:37
+msgid "petition.date"
+msgstr "Fechas"
+
+#: templates/partials/table_petitions.html:43
 msgid "petition.actions"
 msgstr "Acciones"
 
-#: templates/partials/tables/items.html:13
-#: templates/partials/tables/types.html:12
-#, fuzzy
-#| msgid "shop.blocked"
-msgid "blocked"
-msgstr "Bloqueado"
+#: templates/partials/tables/items.html:9
+msgid "item.view_profile"
+msgstr "Ver Perfil"
 
-#: templates/partials/tables/items.html:20
-#, fuzzy
-#| msgid "shop.blocked"
-msgid "not_blocked"
-msgstr "Bloqueado"
-
-#: templates/partials/tables/items.html:31
-msgid "not_available"
-msgstr ""
-
-#: templates/partials/tables/items.html:38
-#: templates/partials/tables/types.html:19
-msgid "available"
-msgstr ""
-
-#: templates/partials/tables/items.html:44
-msgid "item.delete"
-msgstr ""
-
-#: templates/partials/tables/items.html:46
-msgid "item.unblock"
-msgstr ""
-
-#: templates/partials/tables/items.html:46
-msgid "item.block"
-msgstr ""
-
-#: templates/partials/tables/petitions.html:25
-#: templates/petition_profile.html:32 templates/petition_profile.html:46
-msgid "waiting"
-msgstr "Esperando"
-
-#: templates/partials/tables/petitions.html:34
-msgid "off"
-msgstr ""
-
-#: templates/partials/tables/petitions.html:39
+#: templates/partials/tables/petitions.html:11
 msgid "petition.view_profile"
 msgstr "Ver Perfil"
 
+#: templates/partials/tables/types.html:12 templates/type_profile.html:19
+msgid "blocked"
+msgstr "Bloqueado"
+
+#: templates/partials/tables/types.html:19
+msgid "available"
+msgstr "Disponible"
+
 #: templates/partials/tables/types.html:22
-#, fuzzy
-#| msgid "users.view_profile"
 msgid "type.view_profile"
-msgstr "Ver perfil"
+msgstr "Ver Perfil"
 
 #: templates/partials/tables/users.html:37
-#, fuzzy
-#| msgid "users.banned"
 msgid "banned"
-msgstr "Vetad"
+msgstr "Vetado"
 
 #: templates/partials/tables/users.html:44
-#, fuzzy
-#| msgid "banned.banned"
 msgid "not_banned"
-msgstr "Vetado"
+msgstr "ta bien"
 
 #: templates/partials/tables/users.html:52
 msgid "admin"
@@ -407,159 +530,173 @@ msgstr "Delegación"
 
 #: templates/partials/tables/users.html:59
 msgid "users.view_profile"
-msgstr "Ver perfil"
+msgstr "Ver Perfil"
 
 #: templates/petition_profile.html:4
 msgid "titles.petition_profile"
-msgstr "Ver Petición"
+msgstr "Perfil"
 
 #: templates/petition_profile.html:20
-#, fuzzy
-#| msgid "petition.type"
-msgid "petition.type_name"
-msgstr "Tipo"
+msgid "petition.item"
+msgstr "Ítem"
+
+#: templates/petition_profile.html:32 templates/petition_profile.html:46
+msgid "waiting"
+msgstr "Esperando"
 
 #: templates/petition_profile.html:41
-#, fuzzy
-#| msgid "petition.user"
 msgid "petition.until"
-msgstr "Usuario"
+msgstr "Hasta"
 
 #: templates/petition_profile.html:56
-#, fuzzy
-#| msgid "petition.actions"
 msgid "petition.accept_and_save"
-msgstr "Acciones"
+msgstr "Aceptar"
 
 #: templates/petition_profile.html:59
-#, fuzzy
-#| msgid "petition.date"
 msgid "petition.decline"
-msgstr "Fecha"
+msgstr "Rechazar"
 
 #: templates/petition_profile.html:63
-#, fuzzy
-#| msgid "petition.date"
 msgid "petition.edit"
-msgstr "Fecha"
+msgstr "Editar"
 
 #: templates/petition_profile.html:64
-#, fuzzy
-#| msgid "petition.user"
 msgid "petition.collect"
-msgstr "Usuario"
+msgstr "Devuelto"
 
 #: templates/petition_profile.html:71
-#, fuzzy
-#| msgid "petition.user"
 msgid "petition.print"
-msgstr "Usuario"
+msgstr "Imprimit"
 
 #: templates/petitions.html:4
 msgid "titles.petitions"
-msgstr "Peticiones"
+msgstr "Solicitudes"
 
-#: templates/profile.html:11
-msgid "users.viewing_as_staff"
-msgstr "¡Vista de Administrador!"
+#: templates/print.html:4 templates/validate.html:4
+msgid "titles.validate"
+msgstr "Validar"
+
+#: templates/print.html:18
+msgid "None"
+msgstr "Ninguno/a"
+
+#: templates/print.html:29
+msgid "print.from"
+msgstr "Desde"
+
+#: templates/print.html:36
+msgid "print.until"
+msgstr "Hasta"
 
 #: templates/profile.html:12
-msgid "users.not_your_profile_warning"
-msgstr "Este no es tu perfil"
+msgid "users.is_banned"
+msgstr "Vetado"
 
-#: templates/profile.html:15
+#: templates/profile.html:13
+msgid "users.user_is_banned"
+msgstr "Vetado"
+
+#: templates/profile.html:17
+msgid "users.viewing_as_staff"
+msgstr "Viendo como Admin"
+
+#: templates/profile.html:18
+msgid "users.not_your_profile_warning"
+msgstr "¡Este no es tu perfil!"
+
+#: templates/profile.html:21
 msgid "users.back_to_list"
 msgstr "Volver a la lista"
 
-#: templates/profile.html:16
+#: templates/profile.html:22
 msgid "users.go_to_your_profile"
-msgstr "Ir a tu perfil"
+msgstr "Ir a mi perfil"
 
-#: templates/profile.html:24
+#: templates/profile.html:33
 msgid "user.name"
 msgstr "Nombre"
 
-#: templates/profile.html:28
+#: templates/profile.html:37
 msgid "user.email"
-msgstr "E-Mail"
+msgstr "Email"
 
-#: templates/profile.html:32
+#: templates/profile.html:41
 msgid "user.dni"
 msgstr "DNI"
 
-#: templates/profile.html:36
+#: templates/profile.html:45
 msgid "user.phone"
-msgstr "Teléfono"
+msgstr "Nuḿero de Teléfono"
 
-#: templates/profile.html:40
+#: templates/profile.html:49
 msgid "user.join_date"
-msgstr "Fecha de Registro"
-
-#: templates/profile.html:44
-msgid "user.last_login"
-msgstr "Último Inicio de Sesión"
+msgstr "Fecha de Alta"
 
 #: templates/profile.html:53
+msgid "user.last_login"
+msgstr "Último Acceso"
+
+#: templates/profile.html:62
 msgid "user.staff_info"
-msgstr "Panel de Administración"
+msgstr "Menú de Admin"
 
-#: templates/profile.html:54
-msgid "user.send_email"
-msgstr "Enviar mensaje"
+#: templates/profile.html:63
+msgid "user.send_message"
+msgstr "Enviar Mensaje"
 
-#: templates/profile.html:56
+#: templates/profile.html:65
 msgid "user.ban"
 msgstr "Vetar"
 
-#: templates/profile.html:58
+#: templates/profile.html:66
 msgid "user.remove_staff"
-msgstr "Quitar staff"
+msgstr "Echar de Delegación"
 
-#: templates/profile.html:60
+#: templates/profile.html:66
 msgid "user.make_staff"
-msgstr "Hacer staff"
+msgstr "Hacer Staff"
 
-#: templates/profile.html:67
+#: templates/profile.html:72
 msgid "user.synced_with_siu"
 msgstr "Sincronizado con SIU"
 
-#: templates/profile.html:68 templates/profile.html:72
-#: templates/profile.html:76
+#: templates/profile.html:73 templates/profile.html:77
+#: templates/profile.html:81
 msgid "yes"
 msgstr "Sí"
 
-#: templates/profile.html:68 templates/profile.html:72
-#: templates/profile.html:76
+#: templates/profile.html:73 templates/profile.html:77
+#: templates/profile.html:81
 msgid "no"
 msgstr "No"
 
-#: templates/profile.html:71
+#: templates/profile.html:76
 msgid "user.is_staff"
 msgstr "Delegación"
 
-#: templates/profile.html:75
+#: templates/profile.html:80
 msgid "user.is_admin"
 msgstr "Admin"
 
-#: templates/profile.html:101
-msgid "profile.add_phone_dni"
-msgstr "Añade tu DNI y Nº de Teléfono para continuar"
-
 #: templates/profile.html:106
+msgid "profile.add_phone_dni"
+msgstr "Añade tu número de teléfono y DNI"
+
+#: templates/profile.html:111
 msgid "phone"
 msgstr "Teléfono"
 
-#: templates/profile.html:109
+#: templates/profile.html:114
 msgid "dni"
 msgstr "DNI"
 
-#: templates/profile.html:116
+#: templates/profile.html:121
 msgid "profile.finish_setup"
-msgstr "Termina de configurar tu cuenta"
+msgstr "Configura tu cuenta"
 
 #: templates/settings.html:4
 msgid "titles.settings"
-msgstr "Configuración"
+msgstr "Ajustes"
 
 #: templates/settings.html:16
 msgid "config.node"
@@ -589,115 +726,109 @@ msgstr "Falso"
 msgid "config.save"
 msgstr "Guardar"
 
+#: templates/store.html:4
+#, fuzzy
+#| msgid "titles.profile"
+msgid "titles.store"
+msgstr "Perfil"
+
 #: templates/store.html:14
 msgid "store.search"
-msgstr "Escribe para Buscar"
-
-#: templates/type_profile.html:4
-msgid "titles.type"
-msgstr "Tipo"
-
-#: templates/types.html:4
-#, fuzzy
-#| msgid "titles.item_list"
-msgid "titles.type_list"
-msgstr "Lista de ítems"
-
-#: templates/types.html:16
-#, fuzzy
-#| msgid "users.search"
-msgid "types.search"
 msgstr "Buscar"
 
-#: templates/types.html:28
-#, fuzzy
-#| msgid "user.name"
+#: templates/type_create.html:4 templates/type_profile.html:4
+msgid "titles.type_profile"
+msgstr "Perfil"
+
+#: templates/type_create.html:13
+msgid "new_type"
+msgstr "Nuevo Tipo"
+
+#: templates/type_create.html:21 templates/type_create.html:25
+#: templates/type_profile.html:29 templates/types.html:29
 msgid "type.name"
 msgstr "Nombre"
 
-#: templates/types.html:29
-#, fuzzy
-#| msgid "shop.blocked"
+#: templates/type_create.html:31 templates/type_profile.html:39
+msgid "type.description"
+msgstr "Descripción"
+
+#: templates/type_create.html:40 templates/type_profile.html:48
+msgid "type.conditions"
+msgstr "Condiciones"
+
+#: templates/type_create.html:49 templates/type_profile.html:57
+#: templates/types.html:30
 msgid "type.blocked"
 msgstr "Bloqueado"
 
-#: templates/users.html:4
-#, fuzzy
-#| msgid "titles.item_list"
-msgid "titles.user_list"
-msgstr "Lista de ítems"
+#: templates/type_create.html:54 templates/type_profile.html:62
+msgid "Yes"
+msgstr "Sí"
+
+#: templates/type_create.html:55 templates/type_profile.html:63
+msgid "No"
+msgstr "No"
+
+#: templates/types.html:4
+msgid "titles.type_list"
+msgstr "Lista de Tipos"
+
+#: templates/types.html:16
+msgid "types.search"
+msgstr "Buscar"
 
 #: templates/users.html:16
 msgid "users.search"
 msgstr "Buscar"
 
-#: templates/users.html:28
+#: templates/users.html:29
 msgid "user.id"
 msgstr "ID"
 
-#: templates/users.html:29
+#: templates/users.html:30
 msgid "users.name"
 msgstr "Nombre"
 
-#: templates/users.html:30
+#: templates/users.html:31
 msgid "users.email"
 msgstr "E-Mail"
 
-#: templates/users.html:31
+#: templates/users.html:32
 msgid "users.dni"
 msgstr "DNI"
 
-#: templates/users.html:32
-msgid "users.phone"
-msgstr "Teléfono"
-
 #: templates/users.html:33
-msgid "users.banned"
-msgstr "Vetad"
+msgid "users.phone"
+msgstr "Número de Teléfono"
 
 #: templates/users.html:34
+msgid "users.banned"
+msgstr "Vetado"
+
+#: templates/users.html:35
 msgid "users.staff"
 msgstr "Delegación"
 
-#: templates/users.html:35
+#: templates/users.html:36
 msgid "users.profile"
 msgstr "Perfil"
 
-#: templates/validate.html:4
-#, fuzzy
-#| msgid "titles.index"
-msgid "titles.validate"
-msgstr "Escritorio"
-
 #: templates/validate.html:16
 msgid "validate.dni"
-msgstr ""
+msgstr "DNI"
 
 #: templates/validate.html:23
 msgid "validate.pid"
-msgstr ""
+msgstr "ID"
 
 #: templates/validate.html:30
 msgid "validate.hash"
-msgstr ""
+msgstr "Hash"
 
-#~ msgid "nav.about"
-#~ msgstr "Acerca de"
+#: usuarios/views.py:115
+msgid "user invalid"
+msgstr "Usuario no válido"
 
-#~ msgid "index.unread_messages"
-#~ msgstr "Tienes mensajes nuevos"
-
-#~ msgid "index.mark_as_read"
-#~ msgstr "Marcar como leído"
-
-#~ msgid "index.petition_is_yours"
-#~ msgstr "¡Es tuyo!"
-
-#~ msgid "days"
-#~ msgstr "Días"
-
-#~ msgid "error"
-#~ msgstr "Error"
-
-#~ msgid "profile.petitions_type_to_search"
-#~ msgstr "Escribe para buscar"
+#~ msgid "messages.title"
+#~ msgstr "Título"

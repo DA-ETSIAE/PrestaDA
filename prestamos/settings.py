@@ -14,9 +14,12 @@ from pathlib import Path
 import os
 
 import mozilla_django_oidc.views
-
+from celery.schedules import crontab
 
 from utils.environment import get_env_bool
+
+import gestor.tasks
+import usuarios.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -189,9 +192,32 @@ if not get_env_bool('PRESTAMOS_LOCALMODE'):
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 
+if os.getenv('FORCE_SCRIPT_NAME'):
+    FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME')
+    USE_X_FORWARDED_HOST = True
+    STATIC_URL = os.getenv('FORCE_SCRIPT_NAME') + "/static/"
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', '')
 EMAIL_PORT = os.getenv('EMAIL_PORT', '')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = get_env_bool('EMAIL_USE_TLS')
 EMAIL_USE_SSL = get_env_bool('EMAIL_USE_SSL')
+
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'amqp://user:password@rabbitmq:5672//')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'rpc://')
+
+
+CELERY_BEAT_SCHEDULE = {
+    "check_expired_petitions": {
+        "task": "gestor.tasks.check_expired_petitions",
+        "schedule": crontab(hour=12, minute=0),
+    },
+    "check_waiting_users": {
+        "task": "usuarios.tasks.check_waiting_users",
+        "schedule": crontab(hour=0, minute=0, day_of_week=1),
+    },
+}

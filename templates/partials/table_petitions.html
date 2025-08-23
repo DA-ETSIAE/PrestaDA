@@ -5,11 +5,11 @@
             <input class="input is-link is-medium has-text-centered"
                    type="text"
                    name="s"
-                   placeholder="{% trans 'petitions.search' %}"
+                   placeholder="{% trans 'search' %}"
                    hx-get="{% url 'petitions' %}"
                    hx-trigger="keyup changed delay:300ms"
                    hx-target="#table"
-                   hx-include="[name='pending_filter'], [name='active_filter'], [name='expired_filter'], [name='user_id']"
+                   hx-include="[name='status'], [name='user_id']"
                    data-theme="light">
             <span class="icon is-small is-left">
                 <i class="iconoir-search"></i>
@@ -18,43 +18,28 @@
     </div>
 
            <div class="field is-justify-content-center mt-2">
-            <label class="checkbox">
-                <input type="checkbox"
-                       name="pending_filter"
-                       hx-get="{% url 'petitions' %}"
-                       hx-trigger="change"
-                       hx-target="#table"
-                       hx-include="[name='s'], [name='active_filter'], [name='expired_filter'], [name='user_id']">
-                {% trans 'petitions.not_pending_filter' %}
-            </label>
-            <label class="checkbox">
-                <input type="checkbox"
-                       name="active_filter"
-                       hx-get="{% url 'petitions' %}"
-                       hx-trigger="change"
-                       hx-target="#table"
-                       hx-include="[name='s'], [name='pending_filter'], [name='expired_filter'], [name='user_id']">
-                {% trans 'petitions.active_filter' %}
-            </label>
-            <label class="checkbox">
-                <input type="checkbox"
-                       name="expired_filter"
-                       hx-get="{% url 'petitions' %}"
-                       hx-trigger="change"
-                       hx-target="#table"
-                       hx-include="[name='s'], [name='pending_filter'], [name='active_filter'], [name='user_id']">
-                {% trans 'petitions.only_expired' %}
-            </label>
-            <a href="{% url 'print' %}" class="is-primary">{% trans 'print_range' %}</a>
+           <div class="select is-medium is-fullwidth">
+            <select name="status"
+                    hx-trigger="change"
+                    hx-get="{% url 'petitions' %}"
+                    hx-target="#table"
+                    hx-include="[name='s'], [name='user_id']">
+                        <option value="">{% trans 'petitions.filter_none' %}</option>
+                        {% for value, label in statii %}
+                        <option value="{{ value }}" >{{ label }}</option>
+                        {% endfor %}
+            </select>
+           </div>
+
         </div>
 
                   <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
         <thead>
             <tr>
-                <th>{% trans 'petition.user' %}</th>
                 <th>{% trans 'petition.type' %}</th>
-                <th>{% trans 'petition.date' %}</th>
                 <th>{% trans 'petition.status' %}</th>
+                <th>{% trans 'petition.user' %}</th>
+                <th>{% trans 'petition.date' %}</th>
                 <th>{% trans 'petition.actions' %}</th>
 
             </tr>

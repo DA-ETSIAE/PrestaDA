@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 
+from gestor.models import Petition
 from usuarios.models import User
 
 
@@ -39,3 +40,22 @@ def table_helper(request, model, fields: List[str], order_by,  per_page, full, p
         return render(request, partial, {context: page_obj})
 
     return render(request, full, {context: page_obj})
+
+def table_helper_status(request, model, fields: List[str], order_by,  per_page, full, partial, context, statii: Optional[Any] = None, add_filters: Optional[Dict[str, Any]] = None, user: Optional[User] = None):
+    models = find(request, model, fields).order_by(order_by)
+    statii = statii if statii is not None else []
+
+    if user:
+        models = models.filter(user=user)
+
+    if add_filters:
+        models = models.filter(**add_filters)
+
+    page_obj = paginate(request.GET.get('p', 1), models, per_page)
+
+    if request.headers.get('HX-Request') == 'true':
+        return render(request, partial, {context: page_obj, 'statii': statii})
+
+    return render(request, full, {context: page_obj, 'statii': statii})
+
+

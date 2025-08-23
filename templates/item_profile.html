@@ -1,7 +1,7 @@
 {% extends '__base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans 'titles.item_create' %}{% endblock %}
+{% block title %}{% trans 'titles.item' %}{% endblock %}
 
 {% block content %}
 <div class="column">
@@ -52,13 +52,12 @@
 
 
             <div class="column is-full">
-                <p class="has-text-weight-semibold">{% trans 'item.blocked' %}</p>
+                <p class="has-text-weight-semibold">{% trans 'item.status' %}</p>
                 <div class="select is-medium is-fullwidth">
-                    <select name="is_blocked"
-                            {% if not request.user.is_superuser %} disabled {% endif %}
-                            required>
-                        <option value="True" {% if item.is_blocked %} selected {% endif %}>{% trans 'Yes' %}</option>
-                        <option value="False" {% if not item.is_blocked %} selected {% endif %}>{% trans 'No' %}</option>
+                    <select name="status" required>
+                        {% for value, label in statii %}
+                        <option value="{{ value }}" {% if value == item.status %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

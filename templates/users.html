@@ -7,44 +7,45 @@
 
 
 <div class="column">
-              <div class="box" style="min-height: 400px;">
-                  <div class="field has-addons is-justify-content-center">
-        <div class="control has-icons-left" style="width: 100%;">
-            <input class="input is-link is-medium has-text-centered"
-                   type="text"
-                   name="s"
-                   placeholder="{% trans 'users.search' %}"
-                   hx-get="{% url 'users' %}"
-                   hx-trigger="keyup changed delay:300ms"
-                   hx-target="#table"
-                   data-theme="light">
-            <span class="icon is-small is-left">
-                <i class="iconoir-search    "></i>
-            </span>
-        </div>
+  <div class="box" style="min-height: 400px;">
+    <div class="field has-addons is-justify-content-center">
+      <div class="control has-icons-left" style="width: 100%;">
+        <input
+          class="input is-link is-medium has-text-centered"
+          type="text"
+          name="s"
+          placeholder="{% trans 'search' %}"
+          hx-get="{% url 'users' %}"
+          hx-trigger="keyup changed delay:300ms"
+          hx-target="#table"
+          data-theme="light"
+        />
+        <span class="icon is-small is-left">
+          <i class="iconoir-search"></i>
+        </span>
+      </div>
     </div>
-                  <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
-        <thead>
-            <tr>
-                <th>{% trans 'user.id' %}</th>
-                <th>{% trans 'users.name' %}</th>
-                <th>{% trans 'users.email' %}</th>
-                <th>{% trans 'users.dni' %}</th>
-                <th>{% trans 'users.phone' %}</th>
-                <th>{% trans 'users.banned' %}</th>
-                <th>{% trans 'users.staff' %}</th>
-                <th>{% trans 'users.profile' %}</th>
-            </tr>
-        </thead>
 
-        <tbody id="table">
-                  {% include 'partials/tables/users.html' %}
-        </tbody>
-                  </table>
+    <table class="table is-striped is-hoverable is-fullwidth" style="vertical-align: center;">
+      <thead>
+        <tr>
+          <th>{% trans 'user.id' %}</th>
+          <th>{% trans 'users.name' %}</th>
+          <th>{% trans 'users.email' %}</th>
+          <th>{% trans 'users.dni' %}</th>
+          <th>{% trans 'users.phone' %}</th>
+          <th>{% trans 'users.banned' %}</th>
+          <th>{% trans 'users.staff' %}</th>
+          <th>{% trans 'users.profile' %}</th>
+        </tr>
+      </thead>
 
-              </div>
+      <tbody id="table">
+        {% include 'partials/tables/users.html' %}
+      </tbody>
+    </table>
+  </div>
 </div>
-
 
 
 {% endblock %}

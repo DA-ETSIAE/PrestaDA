@@ -2,7 +2,6 @@ from django.db import models
 from django.forms import ModelForm
 
 
-# Create your models here.
 class Configuration(models.Model):
     node = models.CharField(max_length=100, unique=True)
     value = models.CharField(max_length=100)

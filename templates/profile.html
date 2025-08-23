@@ -87,7 +87,7 @@
                        hx-get="{% url 'petitions' %}"
                        hx-trigger="change"
                        hx-target="#table"
-                       hx-include="[name='s'], [name='active_filter'], [name='pending_filter']" value="{{ user.id }}" style="display: none">
+                       hx-include="[name='s'], [name='status']" value="{{ user.id }}" style="display: none">
 
                  {% include 'partials/table_petitions.html' %}
 

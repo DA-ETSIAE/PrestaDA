@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.db.models import Q
 from reportlab.lib import colors
 from reportlab.lib.colors import Color, HexColor, black, gray
 from reportlab.lib.pagesizes import A4, landscape
@@ -13,8 +14,7 @@ from utils.crypto import generate_hash
 
 
 def generate_invoice(response, petition: Petition):
-    pending = petition.is_pending
-    active = petition.is_active
+    status = petition.status
     date = petition.until
     item = petition.item.code if petition.item else None
     tipo = petition.type.name
@@ -63,12 +63,12 @@ def generate_invoice(response, petition: Petition):
         c.drawString(2*cm, height - 9.5*cm, "Condiciones:")
         c.setFont("Helvetica", 12)
         text_obj = c.beginText(2*cm, height - 10.5*cm)
-        text_obj.setLeading(4)
+        text_obj.setLeading(12)
         for line in conditions.splitlines():
             text_obj.textLine(line)
         c.drawText(text_obj)
 
-    if not pending and active:
+    if status == Petition.Status.ACTIVE:
         c.setFont("Helvetica", 12)
         c.drawString(1.2*cm, 5*cm, "Firmado por " + name + " con DNI " + dni + ":")
 
@@ -77,9 +77,8 @@ def generate_invoice(response, petition: Petition):
         c.setFont("Courier-Bold", 12)
         c.drawString(1.2 * cm, 2 * cm - 1 * cm, str(petition.id) + "-" + generate_hash(dni, petition.id))
         c.setFont("Courier-Bold", 12)
-
-    if pending or not active:
-        watermark_text = "PENDIENTE" if pending else "NO VÁLIDA"
+    else:
+        watermark_text = "NO VÁLIDA"
         c.saveState()
         c.setFont("Helvetica-Bold", 60)
         c.setFillColor(Color(0.5, 0.5, 0.5, alpha=0.3))
@@ -99,15 +98,17 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
     else:
         petitions = Petition.objects.filter(until__date__range=(start_date, end_date))
 
+
+    petitions.filter(Q(status=Petition.Status.ACTIVE) | Q(status=Petition.Status.EXPIRED) | Q(status=Petition.Status.COLLECTED))
     c = canvas.Canvas(response, pagesize=landscape(A4))
     width, height = landscape(A4)
 
     y = height - 2 * cm
     c.setFont("Helvetica-Bold", 12)
-    c.drawString(2 * cm, y, "Nombre")
+    c.drawString(1 * cm, y, "Nombre")
     c.drawString(10 * cm, y, "Tipo")
-    c.drawString(14 * cm, y, "Código")
-    c.drawString(18 * cm, y, "Fecha (Creada/Aceptada)")
+    c.drawString(18 * cm, y, "Código")
+    c.drawString(22 * cm, y, "Fecha (Desde / Hasta)")
 
     c.setFont("Helvetica", 11)
     y -= 1 * cm
@@ -115,13 +116,13 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
         name = petition.user.username
         tipo = petition.type.name
         item = petition.item.code if petition.item else ""
-        created = petition.date_reserved.strftime("%d-%m-%Y") if petition.date_reserved else ""
-        until = petition.until.strftime("%d-%m-%Y") if petition.until else ""
+        date_reserved = petition.date_reserved.strftime("%Y-%m-%d") if petition.date_reserved else ""
+        until = petition.until.strftime("%Y-%m-%d") if petition.until else ""
 
-        c.drawString(2 * cm, y, name)
+        c.drawString(1 * cm, y, str(petition.id) + "-" + name)
         c.drawString(10 * cm, y, tipo)
-        c.drawString(14 * cm, y, item)
-        c.drawString(18 * cm, y, created + "/" + until)
+        c.drawString(18 * cm, y, item)
+        c.drawString(22 * cm, y, date_reserved + " a " + until)
 
         c.setStrokeColor(gray)
         c.setLineWidth(0.3)

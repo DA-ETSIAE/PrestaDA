@@ -22,7 +22,7 @@
                 <p>
                     <input name="title" type="text"
                            class="input is-medium is-fullwidth"
-                           placeholder="{% trans 'messages.title' %}"
+                           placeholder="{% trans 'message.title' %}"
                            {% if not request.user.is_superuser %} disabled {% endif %}/>
                 </p>
             </div>
@@ -40,10 +40,9 @@
                 <p class="has-text-weight-semibold">{% trans 'item.blocked' %}</p>
                 <div class="select is-medium is-fullwidth">
                     <select name="color" required>
-                        <option value="success" >{% trans 'green' %}</option>
-                        <option value="link" selected>{% trans 'blue' %}</option>
-                        <option value="danger" selected>{% trans 'red' %}</option>
-                        <option value="warning" selected>{% trans 'yellow' %}</option>
+                        {% for value, label in colors %}
+                        <option value="{{ value }}" >{{ label }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
