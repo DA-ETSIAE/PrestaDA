@@ -1,4 +1,4 @@
-name: Build Docker image
+name: Build/Push Docker image
 on:
   push:
     branches:
