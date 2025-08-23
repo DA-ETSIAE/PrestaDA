@@ -77,7 +77,6 @@ def delete_item(request):
     if request.method != 'POST':
         return HttpResponse(status=404)
 
-    print(request.POST.get('value'))
     item = Item.objects.get(id=request.POST.get('id'))
 
     if not item:
@@ -289,13 +288,12 @@ def validate(request):
         pid = form.cleaned_data['pid']
         hashed = form.cleaned_data['hashed']
         if hashed == generate_hash(dni, pid):
-            print(generate_hash(dni, pid))
             return render(request,'partials/form_success.html')
         else:
             return render(request, 'partials/form_error.html', {'error': _('errors.doesnt_match')})
     return render(request, 'partials/form_error.html', {'form': form})
 
-@user_passes_test(User.superuser_check, login_url='login')
+@user_passes_test(User.staff_check, login_url='login')
 def print_list(request):
     if request.method != 'POST':
         types = Type.objects.all()
