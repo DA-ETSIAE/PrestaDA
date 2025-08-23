@@ -566,7 +566,7 @@ msgstr "Devuelto"
 
 #: templates/petition_profile.html:71
 msgid "petition.print"
-msgstr "Imprimit"
+msgstr "Imprimir"
 
 #: templates/petitions.html:4
 msgid "titles.petitions"
