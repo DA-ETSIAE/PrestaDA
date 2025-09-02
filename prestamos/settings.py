@@ -196,6 +196,8 @@ if os.getenv('FORCE_SCRIPT_NAME'):
     FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME')
     USE_X_FORWARDED_HOST = True
     STATIC_URL = os.getenv('FORCE_SCRIPT_NAME') + "/static/"
+    BASE_URL = os.getenv('BASE_URL') + FORCE_SCRIPT_NAME
+    
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
