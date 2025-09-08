@@ -65,5 +65,16 @@ class BanMiddleware:
         return self.get_response(request)
 
 
+class ScriptNameMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        prefix = os.environ.get("FORCE_SCRIPT_NAME", "/prestamos")
+        request.META["SCRIPT_NAME"] = prefix
+        if request.path.startswith(prefix):
+            request.path_info = request.path[len(prefix):] or "/"
+        return self.get_response(request)
+
 
 
