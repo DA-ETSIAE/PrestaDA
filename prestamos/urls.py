@@ -26,6 +26,7 @@ import usuarios
 urlpatterns = [
 
     path('', views.index, name="index"),
+    path("__debug_path__", lambda r: HttpResponse(f"Received Path: {r.path}")),
     path('store/', views.store, name="store"),
     path('reserve/<int:tid>', gestor_views.reserve, name="reserve"),
     path('', include("usuarios.urls")),
