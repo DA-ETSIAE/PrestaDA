@@ -65,6 +65,7 @@ LOGIN_URL = 'login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'utils.middlewares.ScriptNameMiddleware'
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -195,8 +196,12 @@ if not get_env_bool('PRESTAMOS_LOCALMODE'):
 FORCE_SCRIPT_NAME = os.getenv('FORCE_SCRIPT_NAME', None)
 
 if FORCE_SCRIPT_NAME:
-    STATIC_URL = FORCE_SCRIPT_NAME + 'static/'
-    MEDIA_URL = FORCE_SCRIPT_NAME + 'media/'
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    FORCE_SCRIPT_NAME = "/prestamos"
+    STATIC_URL = FORCE_SCRIPT_NAME + "/static/"
+    MEDIA_URL  = FORCE_SCRIPT_NAME + "/media/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', '')
