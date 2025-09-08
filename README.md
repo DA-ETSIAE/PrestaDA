@@ -8,7 +8,7 @@ En cualquier caso, se ha de configurar una base de datos (Postgres) y un broker 
 Se puede sustituir Postgres por otras bases de datos SQL (e.j. MariaDB) así como RabbitMQ por Redis ([pero no Valkey](https://github.com/celery/celery/issues/9092)), 
 pero puede que no funcione.
 
-En dockerhub: [`ticdaetsiae/prestamos`](https://hub.docker.com/repository/docker/ticdaetsiae/prestamos).
+En dockerhub: [`ticdaetsiae/prestamos`](https://hub.docker.com/r/ticdaetsiae/prestamos/).
 
 Ver compose.yml y env.example para ejemplo de uso.
 
