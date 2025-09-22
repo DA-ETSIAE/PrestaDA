@@ -3,7 +3,7 @@ Django==5.2.5
 sqlparse==0.5.3
 gunicorn==23.0.0
 psycopg2-binary==2.9.10
-whitenoise==6.10.0
+whitenoise==6.11.0
 mozilla-django-oidc==4.0.1
 reportlab==4.4.3
 celery==5.5.3
