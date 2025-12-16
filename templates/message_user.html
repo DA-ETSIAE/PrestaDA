@@ -18,11 +18,11 @@
             {% csrf_token %}
 
            <div class="column is-full">
-                <p class="has-text-weight-semibold">{% trans 'message.content' %}</p>
+                <p class="has-text-weight-semibold">{% trans 'message.to_name' %}</p>
                 <p>
                     <input name="user" type="text"
                            class="input is-medium is-fullwidth"
-                           value="{{ user.username }}"
+                           value="{{ user.first_name }} {{ user.last_name }}"
                            disabled />
                 </p>
             </div>
