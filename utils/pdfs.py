@@ -113,7 +113,7 @@ def generate_registry(response, start_date, end_date, type: Optional[Type]):
     c.setFont("Helvetica", 11)
     y -= 1 * cm
     for petition in petitions:
-        name = petition.user.username
+        name = petition.user.first_name
         tipo = petition.type.name
         item = petition.item.code if petition.item else ""
         date_reserved = petition.date_reserved.strftime("%Y-%m-%d") if petition.date_reserved else ""
