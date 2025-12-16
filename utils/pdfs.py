@@ -18,7 +18,7 @@ def generate_invoice(response, petition: Petition):
     date = petition.until
     item = petition.item.code if petition.item else None
     tipo = petition.type.name
-    name = petition.user.username
+    name = petition.user.first_name
     dni = petition.user.dni
     conditions = petition.type.conditions
 
