@@ -730,7 +730,7 @@ msgstr "Guardar"
 #, fuzzy
 #| msgid "titles.profile"
 msgid "titles.store"
-msgstr "Perfil"
+msgstr "Tienda"
 
 #: templates/store.html:14
 msgid "store.search"

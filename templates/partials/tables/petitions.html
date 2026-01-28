@@ -6,7 +6,7 @@
                 <tr>
                 <td><b>{{ p.type }}</b> {% if p.item %}({{ p.item.code }}){% endif %}</td>
                 <td> <div class="tags has-addons"> <span class="tag is-medium  {{ p.status|petitionstatus_color }} "><i class="{{ p.status|petitionstatus_icon}}"></i> </span><span class="tag is-medium ">{{ p.get_status_display }}</span></div></td>
-                <td> <i class="iconoir-user"></i> <a href="{% url 'profile' p.user.id %}">{{ user.first_name }} {{ user.last_name }}</a></td>
+                <td> <i class="iconoir-user"></i> <a href="{% url 'profile' p.user.id %}">{{ p.user.first_name }} {{ p.user.last_name }}</a></td>
                 <td>{% if p.until %} {{ p.date_reserved|date:"d/m/Y H:i"  }} a {{ p.until|date:"d/m/Y"  }} {% endif %}  </td>
                 <td><a class="button is-link is-light" href="{% url 'petition' p.id %}">{% trans 'petition.view_profile' %}</a></td>
                 </tr>
