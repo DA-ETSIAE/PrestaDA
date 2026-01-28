@@ -6,5 +6,5 @@ psycopg2-binary==2.9.11
 whitenoise==6.11.0
 mozilla-django-oidc==5.0.2
 reportlab==4.4.6
-celery==5.6.0
+celery==5.6.2
 redis==7.1.0
