@@ -3,6 +3,7 @@
 <html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %} {{ site_config.app_name }} {% endblock %} | {{ site_config.org }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css" />
@@ -19,7 +20,8 @@
                 top: 3.25rem;
                 left: 0;
                 bottom: 0;
-                width: 220px;
+                width: 80vw;
+                max-width: 260px;
                 background: white;
                 box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
                 transform: translateX(-100%);
@@ -83,8 +85,16 @@
             border-radius: 1rem;
             background: #f0f0f0;
             color: #333;
+            font-size: 1rem;
             transition: transform 0.2s, background 0.2s;
-        }
+        }       
+
+        @media (max-width: 768px) {
+            .bubble {
+            min-width: 0;
+            max-width: 100%;
+            }
+        }  
 
         .bubble:hover {
             transform: translateY(-2px);
@@ -146,7 +156,7 @@
     <section class="section" style="padding-top: 1rem;">
         <div class="columns">
             {% if request.user.is_authenticated %}
-                <div id="sidebar" class="column is-narrow" style="width: 220px;">
+                <div id="sidebar" class="column is-narrow is-hidden-touch">
                     <aside class="menu p-3">
                         <p class="menu-label">{% trans 'menu.general' %}</p>
                         <ul class="menu-list">
