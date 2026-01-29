@@ -727,8 +727,6 @@ msgid "config.save"
 msgstr "Guardar"
 
 #: templates/store.html:4
-#, fuzzy
-#| msgid "titles.profile"
 msgid "titles.store"
 msgstr "Tienda"
 
