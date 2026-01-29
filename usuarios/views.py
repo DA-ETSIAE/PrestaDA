@@ -91,7 +91,7 @@ def ban(request, pid):
         target.banned_at = timezone.now()
         target.is_banned = True
         target.save()
-        create_audit(request, AuditLog.AuditTypes.UPDATE, 'Banned ' + target.username)
+        create_audit(request, AuditLog.AuditTypes.UPDATE, 'Banned ' + target.first_name)
         response = HttpResponse()
         response['HX-Redirect'] = reverse('profile', args=[target.id])
         return response

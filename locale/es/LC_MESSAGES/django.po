@@ -261,8 +261,8 @@ msgid "logs.search"
 msgstr "Buscar"
 
 #: templates/audit.html:28
-msgid "log.user.email"
-msgstr "E-Mail"
+msgid "log.user.name"
+msgstr "Nombre"
 
 #: templates/audit.html:29
 msgid "log.audit_type"

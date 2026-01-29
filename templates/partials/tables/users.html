@@ -4,59 +4,13 @@
             {% for user in users %}
                 <tr>
                 <td>{{ user.id }}</td>
-                <td>{{ user.first_name }}</td>
+                <td>{{ user.first_name }} {% if user.is_superuser %}  <span class="tag is-link is-medium">{% trans "admin" %}</span> {% endif %} {% if user.is_staff %}  
+                            <span class="tag is-info is-medium">{% trans "staff" %}</span> {% endif %}   {% if user.is_banned %} 
+                            <div class="tags has-addons"> <span class="tag is-danger is-medium"> <i class="iconoir-hammer"></i></span><span class="tag is-medium">{% trans "banned" %}</span> </div>{% endif %} </td>
+                <td>{% if not user.dni %}  <span class="tag is-danger is-medium"> <i class="iconoir-link-slash"></i> </span> {% else %} {{ user.dni }} {% endif %}</td>
                 <td>{{ user.email }}</td>
-
-<td>
-  {% if not user.dni %}
-    <span class="tag is-danger is-medium">
-      <i class="iconoir-link-slash"></i>
-    </span>
-  {% else %}
-    {{ user.dni }}
-  {% endif %}
-</td>
-
-
-<td>
-  {% if not user.phone %}
-    <span class="tag is-danger is-medium">
-      <i class="iconoir-link-slash"></i>
-    </span>
-  {% else %}
-    {{ user.phone }}
-  {% endif %}
-</td>
-
-<td>
-  {% if user.is_banned %}
-    <div class="tags has-addons">
-      <span class="tag is-danger is-medium">
-        <i class="iconoir-hammer"></i>
-      </span>
-      <span class="tag is-medium">{% trans "banned" %}</span>
-    </div>
-  {% else %}
-    <div class="tags has-addons">
-      <span class="tag is-primary is-medium">
-       <i class="iconoir-badge-check"></i>
-      </span>
-      <span class="tag is-medium">{% trans "not_banned" %}</span>
-    </div>
-  {% endif %}
-</td>
-
-
-<td>
-  {% if user.is_superuser %}
-    <span class="tag is-link is-medium">{% trans "admin" %}</span>
-  {% endif %}
-
-  {% if user.is_staff %}
-    <span class="tag is-info is-medium">{% trans "staff" %}</span>
-  {% endif %}
-</td>
- <td><a class="button is-link is-light" href="{% url 'profile' user.id %}">{% trans 'users.view_profile' %}</a></td>
+                <td>{% if not user.phone %} <span class="tag is-danger is-medium"> <i class="iconoir-link-slash"></i>  </span>{% else %} {{ user.phone }} {% endif %}</td> 
+                <td><a class="button is-link is-light" href="{% url 'profile' user.id %}">{% trans 'users.view_profile' %}</a></td>
                 </tr>
             {% endfor %}
 
