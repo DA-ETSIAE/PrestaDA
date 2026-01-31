@@ -114,7 +114,7 @@ def make_staff(request):
     if user is None:
         return render(request, 'partials/form_error.html', {'error': _('user invalid')})
 
-    create_audit(request, AuditLog.AuditTypes.UPDATE, 'Made staff ' + user.username)
+    create_audit(request, AuditLog.AuditTypes.UPDATE, 'Made staff ' + user.first_name)
     user.is_staff = not user.is_staff
     user.save()
     response = HttpResponse()
