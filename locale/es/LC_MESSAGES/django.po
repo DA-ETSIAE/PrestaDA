@@ -95,7 +95,7 @@ msgstr "Tipo no válido"
 
 #: gestor/views.py:192
 msgid "errors.blocked_type"
-msgstr "Tipo bloqueado"
+msgstr "No lo puedes solicitar, ya que no quedan existencias."
 
 #: gestor/views.py:197
 #, python-format
@@ -327,7 +327,7 @@ msgstr "Tu feed"
 
 #: templates/index.html:71 templates/index.html:78
 msgid "index.petition_pending"
-msgstr "Pendiente"
+msgstr "Pendiente. Acude al despacho de Delegación de Alumnos/as para avanzar con el proceso. Si en una semana no acudes, se cancelerá la reserva."
 
 #: templates/index.html:95
 msgid "index.petition_details"
@@ -448,7 +448,7 @@ msgstr "Solicitar"
 
 #: templates/partials/results.html:24
 msgid "shop.blocked"
-msgstr "No solicitable"
+msgstr "Sin existencias"
 
 #: templates/partials/store_error.html:6
 msgid "store.error"
@@ -461,7 +461,7 @@ msgstr "Éxito"
 #: templates/partials/store_success.html:9
 #, python-format
 msgid " Type %(type)s requested! "
-msgstr "Has solicitado un/a %(type)s"
+msgstr "Se ha creado la solicitud de un/a %(type)s. Acude al despacho de Delegación de Alumnos/as para recogerlo. Si deseas cancelar la reserva, ponte en contacto con nosotros."
 
 #: templates/partials/table_petitions.html:8
 msgid "petitions.search"
