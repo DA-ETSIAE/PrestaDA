@@ -7,4 +7,4 @@ whitenoise==6.11.0
 mozilla-django-oidc==5.0.2
 reportlab==4.4.9
 celery==5.6.2
-redis==7.1.0
+redis==7.1.1
