@@ -1,6 +1,6 @@
 asgiref==3.11.1
 Django==6.0.2
-sqlparse==0.5.4
+sqlparse==0.5.5
 gunicorn==25.0.3
 psycopg2-binary==2.9.11
 whitenoise==6.11.0
