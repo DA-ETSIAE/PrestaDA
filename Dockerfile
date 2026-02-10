@@ -1,5 +1,5 @@
 # Build
-FROM python:3.13-slim AS builder
+FROM python:3.14-slim AS builder
 
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install gettext && \
@@ -22,8 +22,8 @@ COPY . /app/
 RUN django-admin compilemessages
 
 # Production
-FROM python:3.13-slim
-LABEL maintainer="Iván Moya Ortiz <tic.da.aeroespacial@upm.es>, DA-ETSIAE <da.aeroespacial@upm.es>" \
+FROM python:3.14-slim
+LABEL maintainer="Iván Moya Ortiz <ivn.moya@proton.me>" \
       version="1.0" \
       description="Aplicación web para la gestión de préstamos (taquillas, libros, etc) en la ETSIAE-UPM" \
       org.opencontainers.image.source="https://github.com/DA-ETSIAE/Prestamos"
@@ -32,7 +32,7 @@ RUN useradd -m -r appuser && \
    mkdir /app && \
    chown -R appuser /app
 
-COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
+COPY --from=builder /usr/local/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY --from=builder /app/locale /app/locale
 
