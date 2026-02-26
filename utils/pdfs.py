@@ -11,6 +11,11 @@ from utils.crypto import generate_hash
 
 
 def generate_invoice(response, petition):
+     months_es = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ]
+    
     c = canvas.Canvas(response, pagesize=A4)
     width, height = A4
 
@@ -20,14 +25,6 @@ def generate_invoice(response, petition):
     y = height - 3 * cm
 
     c.setTitle("ACUERDO PRÉSTAMO")
-
-    # =========================
-    # TAQUILLA
-    # =========================
-    if petition.item:
-        c.setFont("Helvetica", 11)
-        c.drawCentredString(center_x, y, f"Taquilla: {petition.item.code}")
-        y -= 1.5 * cm
 
     # =========================
     # TITLE
@@ -104,13 +101,14 @@ def generate_invoice(response, petition):
     # =========================
     item_code = petition.item.code if petition.item else "N/A"
     item_type = petition.type if petition.type else "N/A"
-    petition_until = petition.until if petition.until else "indefinido"
+    date = petition.until if petition.until else "indefinido"
+    formatted_date = f"{date.day} de {months_es[date.month - 1]} de {date.year}"
     
     c.setFont("Helvetica", 11)
     c.drawString(
         left_margin,
         y,
-        f"solicita el uso de/l la {item_type} {item_code} hasta {petition_until}."
+        f"acuerda el uso de/l la {item_type} {item_code} hasta {petition_until}."
     )
     y -= 1.2 * cm
 
@@ -136,7 +134,7 @@ def generate_invoice(response, petition):
 
     c.setFont("Helvetica", 11)
     c.drawString(left_margin, signature_y, "Fdo.: ___________________________")
-    c.drawString(left_margin, signature_y - 0.8 * cm, "El / La Titular")
+    c.drawString(left_margin, signature_y - 0.8 * cm, "El/La Titular")
 
     right_sig_x = width - right_margin - 7 * cm
     c.drawString(right_sig_x, signature_y, "Fdo.: ___________________________")
@@ -149,10 +147,6 @@ def generate_invoice(response, petition):
     # =========================
     # DATE IN SPANISH
     # =========================
-    months_es = [
-        "enero", "febrero", "marzo", "abril", "mayo", "junio",
-        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-    ]
 
     date = petition.until or timezone.now()
     formatted_date = f"{date.day} de {months_es[date.month - 1]} de {date.year}"
