@@ -1,137 +1,142 @@
 from typing import Optional
 
 from django.db.models import Q
-from reportlab.lib import colors
-from reportlab.lib.colors import Color, HexColor, black, gray
-from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
+from reportlab.lib.colors import black
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Frame
+from reportlab.platypus import KeepInFrame
+from reportlab.platypus import Spacer
+from reportlab.platypus import BaseDocTemplate
+from reportlab.platypus import PageTemplate
+from reportlab.platypus import Frame
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 from configuracion.models import Configuration
-from gestor.models import Petition, Type
-from usuarios.models import User
 from utils.crypto import generate_hash
 
 
-def generate_invoice(response, petition: Petition):
-    status = petition.status
-    date = petition.until
-    item_code = petition.item.code if petition.item else ""
-    tipo = petition.type.name
+def generate_invoice(response, petition):
+    c = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+
+    c.setTitle(Configuration.objects.get(node='agreement_title').value)
+
+    # Margins
+    left_margin = 2.5 * cm
+    right_margin = 2.5 * cm
+    usable_width = width - left_margin - right_margin
+
+    y = height - 2.5 * cm
+
+    # =========================
+    # TAQUILLA (Centered small box style)
+    # =========================
+    if petition.item:
+        c.setFont("Helvetica", 11)
+        c.drawCentredString(width / 2, y, f"Ítem: {petition.item.code}")
+        y -= 1.2 * cm
+
+    # =========================
+    # MAIN TITLE (Centered, uppercase)
+    # =========================
+    c.setFont("Helvetica-Bold", 16)
+    c.drawCentredString(
+        width / 2,
+        y,
+        Configuration.objects.get(node='agreement_header').value.upper()
+    )
+    y -= 1.2 * cm
+
+    # Subtitle
+    c.setFont("Helvetica-Oblique", 13)
+    c.drawCentredString(
+        width / 2,
+        y,
+        Configuration.objects.get(node='org').value
+    )
+    y -= 1.8 * cm
+
+    # =========================
+    # BODY TEXT (Formal paragraph style)
+    # =========================
+    c.setFont("Helvetica", 11)
 
     user = petition.user
-    full_name = petition.user.username
     dni = user.dni or ""
     email = user.email or ""
     phone = user.phone or ""
+    tipo = petition.type.name
+    date = petition.until
 
-    conditions = petition.type.conditions
+    text = c.beginText(left_margin, y)
+    text.setLeading(16)
 
-    c = canvas.Canvas(response, pagesize=A4)
-    width, height = A4
-    c.setTitle(Configuration.objects.get(node='agreement_title').value)
-
-    # Header background
-    c.setFillColor(HexColor('#f0f0f0'))
-    c.rect(0, height - 3 * cm, width, 3 * cm, fill=1, stroke=0)
-
-    c.setFillColor(black)
-    c.setFont("Helvetica-Bold", 22)
-    c.drawCentredString(
-        width / 2,
-        height - 2 * cm,
-        Configuration.objects.get(node='agreement_header').value
+    text.textLine("Por el presente documento el/la alumno/a:")
+    text.textLine("")
+    text.textLine(f"D./Dña {user.username}, con DNI número {dni},")
+    text.textLine(f"email {email} y número de teléfono {phone},")
+    text.textLine("")
+    text.textLine(
+        f"solicita el uso de la {tipo}"
+        f"{' ' + petition.item.code if petition.item else ''}"
+        f" durante el período de un año académico."
+    )
+    text.textLine("")
+    text.textLine(
+        "Al firmar el presente documento acepta la normativa vigente "
+        "y las condiciones establecidas para el uso."
     )
 
-    c.setFont("Helvetica", 14)
-    c.drawCentredString(
-        width / 2,
-        height - 2.8 * cm,
-        Configuration.objects.get(node='org').value
-    )
+    if petition.type.conditions:
+        text.textLine("")
+        for line in petition.type.conditions.splitlines():
+            text.textLine(line)
 
-    y_position = height - 5 * cm
+    c.drawText(text)
 
-    # Taquilla (Item Code)
-    if item_code:
-        c.setFont("Helvetica-Bold", 12)
-        c.drawString(2 * cm, y_position, f"Taquilla: {item_code}")
-        y_position -= 1 * cm
+    # =========================
+    # SIGNATURE AREA
+    # =========================
+    signature_y = 5 * cm
 
-    # Object
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(2 * cm, y_position, "Objeto:")
-    c.setFont("Helvetica", 12)
-    c.drawString(4 * cm, y_position, tipo)
-    y_position -= 1 * cm
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin, signature_y, "Fdo.: ___________________________")
+    c.drawString(left_margin, signature_y - 0.8 * cm, "El / La Titular")
 
-    # Arrendatario Section
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(2 * cm, y_position, "Arrendatario:")
-    y_position -= 0.8 * cm
+    c.drawString(width - right_margin - 7 * cm, signature_y,
+                 "Fdo.: ___________________________")
+    c.drawString(width - right_margin - 7 * cm,
+                 signature_y - 0.8 * cm,
+                 Configuration.objects.get(node='org').value)
 
-    c.setFont("Helvetica", 12)
-    c.drawString(2.5 * cm, y_position, f"D/Dña {full_name}")
-    y_position -= 0.8 * cm
-
-    c.drawString(2.5 * cm, y_position, f"con DNI número {dni}")
-    y_position -= 0.8 * cm
-
-    c.drawString(2.5 * cm, y_position, f"email {email}")
-    y_position -= 0.8 * cm
-
-    c.drawString(2.5 * cm, y_position, f"número de contacto {phone}")
-    y_position -= 1.2 * cm
-
-    # End Date
+    # =========================
+    # DATE (Centered bottom)
+    # =========================
     if date:
-        c.setFont("Helvetica-Bold", 12)
-        c.drawString(2 * cm, y_position, "Hasta:")
-        c.setFont("Helvetica", 12)
-        c.drawString(4 * cm, y_position, date.strftime("%d-%m-%Y"))
-        y_position -= 1 * cm
-
-    # Conditions
-    if conditions:
-        c.setFont("Helvetica-Bold", 12)
-        c.drawString(2 * cm, y_position, "Condiciones:")
-        y_position -= 0.8 * cm
-
-        c.setFont("Helvetica", 12)
-        text_obj = c.beginText(2 * cm, y_position)
-        text_obj.setLeading(14)
-
-        for line in conditions.splitlines():
-            text_obj.textLine(line)
-
-        c.drawText(text_obj)
-
-    # Signature Section
-    if status == Petition.Status.ACTIVE:
-        c.setFont("Helvetica", 12)
-        c.drawString(2 * cm, 4 * cm, f"Firmado por D/Dña {full_name} con DNI {dni}")
-
-        c.drawString(
-            2 * cm,
+        c.setFont("Helvetica", 11)
+        c.drawCentredString(
+            width / 2,
             3 * cm,
-            f"Firmado por {Configuration.objects.get(node='org').value}"
+            f"Madrid, a {date.strftime('%d de %B de %Y')}"
         )
 
-        c.setFont("Courier-Bold", 10)
-        c.drawString(
-            2 * cm,
-            2.5 * cm,
+    # =========================
+    # VALIDATION CODE (small footer text)
+    # =========================
+    if petition.status == petition.Status.ACTIVE:
+        c.setFont("Courier", 8)
+        c.drawCentredString(
+            width / 2,
+            2.3 * cm,
             f"{petition.id}-{generate_hash(dni, petition.id)}"
         )
-    else:
-        watermark_text = "NO VÁLIDA"
-        c.saveState()
-        c.setFont("Helvetica-Bold", 60)
-        c.setFillColor(Color(0.5, 0.5, 0.5, alpha=0.3))
-        c.translate(width / 2, height / 2)
-        c.rotate(45)
-        c.drawCentredString(0, 0, watermark_text)
-        c.restoreState()
 
     c.showPage()
     c.save()
