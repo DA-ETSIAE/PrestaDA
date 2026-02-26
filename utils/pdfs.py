@@ -1,6 +1,178 @@
 from typing import Optional
 
 from django.db.models import Q
+from django.utils import timezone
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
+from reportlab.pdfgen import canvas
+
+from configuracion.models import Configuration
+from utils.crypto import generate_hash
+
+
+def generate_invoice(response, petition):
+    c = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+
+    left_margin = 2.8 * cm
+    right_margin = 2.8 * cm
+    center_x = width / 2
+    y = height - 3 * cm
+
+    c.setTitle("ACUERDO DE CESIÓN DE USO DE TAQUILLAS")
+
+    # =========================
+    # TAQUILLA
+    # =========================
+    if petition.item:
+        c.setFont("Helvetica", 11)
+        c.drawCentredString(center_x, y, f"Taquilla: {petition.item.code}")
+        y -= 1.5 * cm
+
+    # =========================
+    # TITLE
+    # =========================
+    c.setFont("Helvetica-Bold", 15)
+    c.drawCentredString(
+        center_x,
+        y,
+        "ACUERDO DE CESIÓN DE USO DE TAQUILLAS 2025 / 2026"
+    )
+    y -= 1.2 * cm
+
+    c.setFont("Helvetica-Oblique", 13)
+    c.drawCentredString(
+        center_x,
+        y,
+        "Delegación de Alumnos de la ETSIAE"
+    )
+    y -= 2 * cm
+
+    # =========================
+    # INTRO
+    # =========================
+    c.setFont("Helvetica", 11)
+    c.drawString(
+        left_margin,
+        y,
+        "Por el presente documento el/la alumno/a:"
+    )
+    y -= 1.2 * cm
+
+    # =========================
+    # TITULAR 1 ONLY
+    # =========================
+    user = petition.user
+    dni = user.dni or ""
+    email = user.email or ""
+    phone = user.phone or ""
+
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin, y, "Titular 1:")
+    y -= 0.8 * cm
+
+    # D./Dña (bold only label)
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(left_margin, y, "D./Dña ")
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin + 2.2 * cm, y, f"{user.username}")
+    y -= 0.8 * cm
+
+    # DNI
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(left_margin, y, "con DNI número ")
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin + 3.8 * cm, y, dni)
+    y -= 0.8 * cm
+
+    # Phone
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(left_margin, y, "número de Teléfono de contacto ")
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin + 6.2 * cm, y, phone)
+    y -= 0.8 * cm
+
+    # Email
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(left_margin, y, "email ")
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin + 1.3 * cm, y, email)
+    y -= 1.5 * cm
+
+    # =========================
+    # REQUEST TEXT
+    # =========================
+    item_code = petition.item.code if petition.item else ""
+    c.setFont("Helvetica", 11)
+    c.drawString(
+        left_margin,
+        y,
+        f"solicita el uso de la taquilla {item_code} durante el período de un año académico por el importe total de 5 euros."
+    )
+    y -= 1.2 * cm
+
+    # =========================
+    # CONDITIONS SECTION (NEW TEXT)
+    # =========================
+    c.drawString(
+        left_margin,
+        y,
+        "Al firmar el documento se aceptan la normativa vigente y las siguientes condiciones:"
+    )
+    y -= 1 * cm
+
+    if petition.type.conditions:
+        for line in petition.type.conditions.splitlines():
+            c.drawString(left_margin + 0.5 * cm, y, f"- {line}")
+            y -= 0.7 * cm
+
+    # =========================
+    # SIGNATURES
+    # =========================
+    signature_y = 5 * cm
+
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin, signature_y, "Fdo.: ___________________________")
+    c.drawString(left_margin, signature_y - 0.8 * cm, "El / La Titular")
+
+    right_sig_x = width - right_margin - 7 * cm
+    c.drawString(right_sig_x, signature_y, "Fdo.: ___________________________")
+    c.drawString(
+        right_sig_x,
+        signature_y - 0.8 * cm,
+        "Delegación de Alumnos ETSI Aeronáutica y del Espacio"
+    )
+
+    # =========================
+    # DATE IN SPANISH
+    # =========================
+    months_es = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ]
+
+    date = petition.until or timezone.now()
+    formatted_date = f"{date.day} de {months_es[date.month - 1]} de {date.year}"
+
+    c.drawCentredString(
+        center_x,
+        3.2 * cm,
+        f"Madrid, a {formatted_date}"
+    )
+
+    # =========================
+    # VALIDATION CODE
+    # =========================
+    if petition.status == petition.Status.ACTIVE:
+        c.setFont("Courier", 8)
+        c.drawCentredString(
+            center_x,
+            2.5 * cm,
+            f"{petition.id}-{generate_hash(dni, petition.id)}"
+        )
+
+    c.showPage()
+    c.save()
 
 
 def generate_registry(response, start_date, end_date, type: Optional[Type]):
