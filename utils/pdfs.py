@@ -103,7 +103,7 @@ def generate_invoice(response, petition):
     # REQUEST TEXT
     # =========================
     item_code = petition.item.code if petition.item else "N/A"
-    item_type = petition.item.type if petition.type else "N/A"
+    item_type = petition.type if petition.type else "N/A"
     petition_until = petition.until if petition.until else "indefinido"
     
     c.setFont("Helvetica", 11)
