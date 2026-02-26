@@ -23,7 +23,7 @@ def generate_invoice(response, petition: Petition):
     full_name = petition.user.username
     dni = user.dni or ""
     email = user.email or ""
-    phone = user.phone_number or ""
+    phone = user.phone or ""
 
     conditions = petition.type.conditions
 
