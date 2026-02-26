@@ -104,13 +104,13 @@ def generate_invoice(response, petition):
     # =========================
     item_code = petition.item.code if petition.item else "N/A"
     item_type = petition.item.type if petition.item.type else "N/A"
-    petition_until = petition.until if petition.until else "indefinidio".
+    petition_until = petition.until if petition.until else "indefinido"
     
     c.setFont("Helvetica", 11)
     c.drawString(
         left_margin,
         y,
-        f"solicita el uso de/l la {item_type} {item_code} hasta {petition_until} ."
+        f"solicita el uso de/l la {item_type} {item_code} hasta {petition_until}."
     )
     y -= 1.2 * cm
 
