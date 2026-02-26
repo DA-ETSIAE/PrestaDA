@@ -19,7 +19,7 @@ def generate_invoice(response, petition):
     center_x = width / 2
     y = height - 3 * cm
 
-    c.setTitle("ACUERDO DE CESIÓN DE USO DE TAQUILLAS")
+    c.setTitle("ACUERDO PRÉSTAMO")
 
     # =========================
     # TAQUILLA
@@ -36,7 +36,7 @@ def generate_invoice(response, petition):
     c.drawCentredString(
         center_x,
         y,
-        "ACUERDO DE CESIÓN DE USO DE TAQUILLAS 2025 / 2026"
+        "ACUERDO De PRÉSTAMO 2025 / 2026"
     )
     y -= 1.2 * cm
 
@@ -87,7 +87,7 @@ def generate_invoice(response, petition):
 
     # Phone
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(left_margin, y, "número de Teléfono de contacto ")
+    c.drawString(left_margin, y, "número de teléfono ")
     c.setFont("Helvetica", 11)
     c.drawString(left_margin + 6.2 * cm, y, phone)
     y -= 0.8 * cm
@@ -102,12 +102,15 @@ def generate_invoice(response, petition):
     # =========================
     # REQUEST TEXT
     # =========================
-    item_code = petition.item.code if petition.item else ""
+    item_code = petition.item.code if petition.item else "N/A"
+    item_type = petition.item.type if petition.item.type else "N/A"
+    petition_until = petition.until if petition.until else "indefinidio".
+    
     c.setFont("Helvetica", 11)
     c.drawString(
         left_margin,
         y,
-        f"solicita el uso de la taquilla {item_code} durante el período de un año académico por el importe total de 5 euros."
+        f"solicita el uso de/l la {item_type} {item_code} hasta {petition_until} ."
     )
     y -= 1.2 * cm
 
@@ -140,7 +143,7 @@ def generate_invoice(response, petition):
     c.drawString(
         right_sig_x,
         signature_y - 0.8 * cm,
-        "Delegación de Alumnos ETSI Aeronáutica y del Espacio"
+        "DA - ETSIAE"
     )
 
     # =========================
