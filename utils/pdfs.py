@@ -11,11 +11,11 @@ from utils.crypto import generate_hash
 
 
 def generate_invoice(response, petition):
-     months_es = [
+    months_es = [
         "enero", "febrero", "marzo", "abril", "mayo", "junio",
         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
     ]
-    
+
     c = canvas.Canvas(response, pagesize=A4)
     width, height = A4
 
@@ -33,7 +33,7 @@ def generate_invoice(response, petition):
     c.drawCentredString(
         center_x,
         y,
-        "ACUERDO De PRÉSTAMO 2025 / 2026"
+        "ACUERDO DE PRÉSTAMO 2025 / 2026"
     )
     y -= 1.2 * cm
 
@@ -57,7 +57,7 @@ def generate_invoice(response, petition):
     y -= 1.2 * cm
 
     # =========================
-    # TITULAR 1 ONLY
+    # TITULAR
     # =========================
     user = petition.user
     dni = user.dni or ""
@@ -65,14 +65,14 @@ def generate_invoice(response, petition):
     phone = user.phone or ""
 
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin, y, "Titular 1:")
+    c.drawString(left_margin, y, "Titular:")
     y -= 0.8 * cm
 
-    # D./Dña (bold only label)
+    # Nombre
     c.setFont("Helvetica-Bold", 11)
     c.drawString(left_margin, y, "D./Dña ")
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin + 2.2 * cm, y, f"{user.first_name}")
+    c.drawString(left_margin + 2.2 * cm, y, f"{user.first_name} {user.last_name}")
     y -= 0.8 * cm
 
     # DNI
@@ -82,7 +82,7 @@ def generate_invoice(response, petition):
     c.drawString(left_margin + 3.8 * cm, y, dni)
     y -= 0.8 * cm
 
-    # Phone
+    # Teléfono
     c.setFont("Helvetica-Bold", 11)
     c.drawString(left_margin, y, "número de teléfono ")
     c.setFont("Helvetica", 11)
@@ -97,23 +97,34 @@ def generate_invoice(response, petition):
     y -= 1.5 * cm
 
     # =========================
+    # FECHA FORMATEADA
+    # =========================
+    if petition.until:
+        until_date = petition.until
+        formatted_date = (
+            f"{until_date.day} de "
+            f"{months_es[until_date.month - 1]} de "
+            f"{until_date.year}"
+        )
+    else:
+        formatted_date = "indefinido"
+
+    # =========================
     # REQUEST TEXT
     # =========================
     item_code = petition.item.code if petition.item else "N/A"
-    item_type = petition.type if petition.type else "N/A"
-    date = petition.until if petition.until else "indefinido"
-    formatted_date = f"{date.day} de {months_es[date.month - 1]} de {date.year}"
-    
+    item_type = petition.type.name if petition.type else "N/A"
+
     c.setFont("Helvetica", 11)
     c.drawString(
         left_margin,
         y,
-        f"acuerda el uso de/l la {item_type} {item_code} hasta {petition_until}."
+        f"acuerda el uso de la {item_type} {item_code} hasta {formatted_date}."
     )
     y -= 1.2 * cm
 
     # =========================
-    # CONDITIONS SECTION (NEW TEXT)
+    # CONDITIONS
     # =========================
     c.drawString(
         left_margin,
@@ -122,7 +133,7 @@ def generate_invoice(response, petition):
     )
     y -= 1 * cm
 
-    if petition.type.conditions:
+    if petition.type and petition.type.conditions:
         for line in petition.type.conditions.splitlines():
             c.drawString(left_margin + 0.5 * cm, y, f"- {line}")
             y -= 0.7 * cm
@@ -145,16 +156,20 @@ def generate_invoice(response, petition):
     )
 
     # =========================
-    # DATE IN SPANISH
+    # DATE (LUGAR Y FECHA)
     # =========================
+    today = petition.until or timezone.now()
 
-    date = petition.until or timezone.now()
-    formatted_date = f"{date.day} de {months_es[date.month - 1]} de {date.year}"
+    formatted_today = (
+        f"{today.day} de "
+        f"{months_es[today.month - 1]} de "
+        f"{today.year}"
+    )
 
     c.drawCentredString(
         center_x,
         3.2 * cm,
-        f"Madrid, a {formatted_date}"
+        f"Madrid, a {formatted_today}"
     )
 
     # =========================
