@@ -72,7 +72,7 @@ def generate_invoice(response, petition):
     c.setFont("Helvetica-Bold", 11)
     c.drawString(left_margin, y, "D./Dña ")
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin + 2.2 * cm, y, f"{user.username}")
+    c.drawString(left_margin + 2.2 * cm, y, f"{user.first_name}")
     y -= 0.8 * cm
 
     # DNI
