@@ -119,7 +119,7 @@ def generate_invoice(response, petition):
     c.drawString(
         left_margin,
         y,
-        f"acuerda el uso de la {item_type} {item_code} hasta {formatted_date}."
+        f"acuerda el uso de un/a {item_type} (identificador: {item_code}) hasta {formatted_date}."
     )
     y -= 1.2 * cm
 
