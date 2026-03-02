@@ -32,7 +32,7 @@ def items(request):
         kwargs['add_filters'] = {'status': status}
 
     return table_helper_status(request, Item, columns, '-id', 40, 'items.html',
-                               'partials/tables/items.html', 'items', statii=Type.Status.choices, **kwargs)
+                               'partials/tables/items.html', 'items', statii=Item.Status.choices, **kwargs)
 
 @user_passes_test(User.staff_check, login_url='login')
 def item_profile(request, iid):
