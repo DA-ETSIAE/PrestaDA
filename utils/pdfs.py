@@ -48,50 +48,39 @@ def generate_invoice(response, petition):
     # =========================
     # INTRO
     # =========================
+    user = petition.user
     c.setFont("Helvetica", 11)
     c.drawString(
         left_margin,
         y,
-        "Por el presente documento el/la alumno/a:"
+        f"Por el presente documento el/la alumno/a {user.first_name} {user.last_name}"
     )
     y -= 1.2 * cm
 
     # =========================
     # TITULAR
     # =========================
-    user = petition.user
     dni = user.dni or ""
     email = user.email or ""
     phone = user.phone or ""
 
-    c.setFont("Helvetica", 11)
-    c.drawString(left_margin, y, "Titular:")
-    y -= 0.8 * cm
-
-    # Nombre
-    c.setFont("Helvetica-Bold", 11)
-    c.drawString(left_margin, y, "D./Dña ")
-    c.setFont("Helvetica", 11)
-    c.drawString(left_margin + 2.2 * cm, y, f"{user.first_name} {user.last_name}")
-    y -= 0.8 * cm
-
     # DNI
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(left_margin, y, "con DNI número ")
+    c.drawString(left_margin, y, "Con DNI/NIE: ")
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin + 3.8 * cm, y, dni)
+    c.drawString(left_margin + 3 * cm, y, dni)
     y -= 0.8 * cm
 
     # Teléfono
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(left_margin, y, "número de teléfono ")
+    c.drawString(left_margin, y, "Número de teléfono:")
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin + 6.2 * cm, y, phone)
+    c.drawString(left_margin + 3.8 * cm, y, phone)
     y -= 0.8 * cm
 
     # Email
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(left_margin, y, "email ")
+    c.drawString(left_margin, y, "E-mail ")
     c.setFont("Helvetica", 11)
     c.drawString(left_margin + 1.3 * cm, y, email)
     y -= 1.5 * cm
@@ -107,7 +96,7 @@ def generate_invoice(response, petition):
             f"{until_date.year}"
         )
     else:
-        formatted_date = "indefinido"
+        formatted_date = "N/A"
 
     # =========================
     # REQUEST TEXT
@@ -116,18 +105,18 @@ def generate_invoice(response, petition):
     item_type = petition.type.name if petition.type else "N/A"
 
     c.setFont("Helvetica", 11)
-    c.drawString(left_margin, y, f"Acuerda el uso de: {item_type} (identificador: {item_code}) hasta {formatted_date}.")
-    y -= 0.5 * cm
+    c.drawString(left_margin, y, f"Acuerda el uso de:")
+    y -= 1 * cm
     
-    c.setFont("Helvetica-Bold", 13)
-    c.drawString(left_margin, y, f"{item_type}, identificador: {item_code} hasta {formatted_date}.")
-    y -= 0.5 * cm
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(left_margin, y, f"{item_code} ({item_type})")
+    y -= 1 * cm
 
     c.setFont("Helvetica", 11)
     c.drawString(left_margin, y, f"hasta {formatted_date}.")
     
     
-    y -= 1.2 * cm
+    y -= 1.5 * cm
 
     # =========================
     # CONDITIONS
@@ -135,7 +124,7 @@ def generate_invoice(response, petition):
     c.drawString(
         left_margin,
         y,
-        "Al firmar el documento se aceptan la normativa vigente y las siguientes condiciones:"
+        "Al firmar el documento se acepta la normativa vigente, y las siguientes condiciones:"
     )
     y -= 0.8 * cm
 
