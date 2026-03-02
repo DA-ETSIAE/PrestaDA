@@ -58,7 +58,7 @@
                 <p class="control">
                     <button name="accept" value="false" type="submit" class="button is-danger">{% trans 'petition.decline' %}</button>
                 </p>
-            {% elif petition.status == status.ACTIVE %}
+            {% elif petition.status == status.ACTIVE or petition.status == status.EXPIRED  %}
                 <p class="control">
                     <button type="submit" class="button is-warning">{% trans 'petition.edit' %}</button>
                     <button type="submit" name="collect" value="true" class="button is-primary">{% trans 'petition.collect' %}</button>
