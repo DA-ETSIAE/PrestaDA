@@ -19,8 +19,8 @@ def generate_invoice(response, petition):
     c = canvas.Canvas(response, pagesize=A4)
     width, height = A4
 
-    left_margin = 2.8 * cm
-    right_margin = 2.8 * cm
+    left_margin = 1.8 * cm
+    right_margin = 1.8 * cm
     center_x = width / 2
     y = height - 3 * cm
 
@@ -116,11 +116,17 @@ def generate_invoice(response, petition):
     item_type = petition.type.name if petition.type else "N/A"
 
     c.setFont("Helvetica", 11)
-    c.drawString(
-        left_margin,
-        y,
-        f"acuerda el uso de un/a {item_type} (identificador: {item_code}) hasta {formatted_date}."
-    )
+    c.drawString(left_margin, y, f"Acuerda el uso de: {item_type} (identificador: {item_code}) hasta {formatted_date}.")
+    y -= 0.5 * cm
+    
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(left_margin, y, f"{item_type}, identificador: {item_code} hasta {formatted_date}.")
+    y -= 0.5 * cm
+
+    c.setFont("Helvetica", 11)
+    c.drawString(left_margin, y, f"hasta {formatted_date}.")
+    
+    
     y -= 1.2 * cm
 
     # =========================
@@ -131,12 +137,12 @@ def generate_invoice(response, petition):
         y,
         "Al firmar el documento se aceptan la normativa vigente y las siguientes condiciones:"
     )
-    y -= 1 * cm
+    y -= 0.8 * cm
 
     if petition.type and petition.type.conditions:
         for line in petition.type.conditions.splitlines():
             c.drawString(left_margin + 0.5 * cm, y, f"- {line}")
-            y -= 0.7 * cm
+            y -= 0.4 * cm
 
     # =========================
     # SIGNATURES
@@ -145,7 +151,7 @@ def generate_invoice(response, petition):
 
     c.setFont("Helvetica", 11)
     c.drawString(left_margin, signature_y, "Fdo.: ___________________________")
-    c.drawString(left_margin, signature_y - 0.8 * cm, "El/La Titular")
+    c.drawString(left_margin, signature_y - 0.8 * cm, f"{user.first_name} {user.last_name}")
 
     right_sig_x = width - right_margin - 7 * cm
     c.drawString(right_sig_x, signature_y, "Fdo.: ___________________________")
