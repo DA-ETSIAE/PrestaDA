@@ -256,10 +256,6 @@ msgstr "Audit"
 msgid "titles.user_list"
 msgstr "Usuarios"
 
-#: templates/audit.html:16
-msgid "search"
-msgstr "Buscar"
-
 #: templates/audit.html:28
 msgid "log.user.name"
 msgstr "Nombre"
@@ -385,10 +381,6 @@ msgstr "Borrar"
 msgid "titles.item_list"
 msgstr "Lista de ítems"
 
-#: templates/items.html:17
-msgid "search"
-msgstr "Buscar"
-
 #: templates/items.html:32
 msgid "item.status"
 msgstr "Estado"
@@ -462,10 +454,6 @@ msgstr "Éxito"
 #, python-format
 msgid " Type %(type)s requested! "
 msgstr "Se ha creado la solicitud de un/a %(type)s. Acude al despacho de Delegación de Alumnos/as para recogerlo. Si deseas cancelar la reserva, ponte en contacto con nosotros."
-
-#: templates/partials/table_petitions.html:8
-msgid "search"
-msgstr "Buscar"
 
 #: templates/partials/table_petitions.html:27
 msgid "petitions.filter_none"
@@ -730,10 +718,6 @@ msgstr "Guardar"
 msgid "titles.store"
 msgstr "Tienda"
 
-#: templates/store.html:14
-msgid "store.search"
-msgstr "Buscar"
-
 #: templates/type_create.html:4 templates/type_profile.html:4
 msgid "titles.type_profile"
 msgstr "Perfil"
@@ -772,11 +756,7 @@ msgstr "No"
 msgid "titles.type_list"
 msgstr "Lista de Tipos"
 
-#: templates/types.html:16
-msgid "search"
-msgstr "Buscar"
-
-#: templates/users.html:16
+#: templates/users.html:16 templates/types.html:16 templates/store.html:14 templates/partials/table_petitions.html:8 templates/items.html:17 templates/audit.html:16
 msgid "search"
 msgstr "Buscar"
 
