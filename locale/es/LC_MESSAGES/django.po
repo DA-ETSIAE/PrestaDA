@@ -257,7 +257,7 @@ msgid "titles.user_list"
 msgstr "Usuarios"
 
 #: templates/audit.html:16
-msgid "logs.search"
+msgid "search"
 msgstr "Buscar"
 
 #: templates/audit.html:28
@@ -386,7 +386,7 @@ msgid "titles.item_list"
 msgstr "Lista de ítems"
 
 #: templates/items.html:17
-msgid "items.search"
+msgid "search"
 msgstr "Buscar"
 
 #: templates/items.html:32
@@ -464,7 +464,7 @@ msgid " Type %(type)s requested! "
 msgstr "Se ha creado la solicitud de un/a %(type)s. Acude al despacho de Delegación de Alumnos/as para recogerlo. Si deseas cancelar la reserva, ponte en contacto con nosotros."
 
 #: templates/partials/table_petitions.html:8
-msgid "petitions.search"
+msgid "search"
 msgstr "Buscar"
 
 #: templates/partials/table_petitions.html:27
@@ -626,7 +626,7 @@ msgstr "DNI"
 
 #: templates/profile.html:45
 msgid "user.phone"
-msgstr "Nuḿero de Teléfono"
+msgstr "Número de Teléfono"
 
 #: templates/profile.html:49
 msgid "user.join_date"
@@ -773,11 +773,11 @@ msgid "titles.type_list"
 msgstr "Lista de Tipos"
 
 #: templates/types.html:16
-msgid "types.search"
+msgid "search"
 msgstr "Buscar"
 
 #: templates/users.html:16
-msgid "users.search"
+msgid "search"
 msgstr "Buscar"
 
 #: templates/users.html:29
