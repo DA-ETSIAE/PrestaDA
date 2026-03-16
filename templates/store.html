@@ -11,9 +11,9 @@
             <input class="input is-link is-medium has-text-centered"
                    type="text"
                    name="s"
-                   placeholder="{% trans 'store.search' %}"
+                   placeholder="{% trans 'search' %}"
                    hx-get="{% url 'store' %}"
-                   hx-trigger="keyup changed delay:300ms"
+                   hx-trigger="keyup changed delay:50ms"
                    hx-target="#results"
                    data-theme="light">
             <span class="icon is-small is-left">
