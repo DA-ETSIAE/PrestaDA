@@ -211,7 +211,9 @@ def reserve(request, tid):
         type.save()
 
     cnt = _('Petition of %(type)s created') % {'type': type}
-    user.message(cnt, False, 'Nueva Solicitud de Préstamo')
+    cnt2 = 'Acude al despacho de Delegación de Alumnos para recoger tu %(type)s. Tienes 7 días para recogerlo, de lo contrario, tu reserva se cancelará.' % {'type': type}
+    user.message(cnt)
+    user.message(cnt2, False, 'Nueva Solicitud de Préstamo')
 
     return render(request, 'partials/store_success.html', {'type': type.name})
 
