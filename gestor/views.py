@@ -211,7 +211,7 @@ def reserve(request, tid):
         type.save()
 
     cnt = _('Petition of %(type)s created') % {'type': type}
-    user.message(cnt)
+    user.message(cnt, False, 'Nueva Solicitud de Préstamo')
 
     return render(request, 'partials/store_success.html', {'type': type.name})
 
